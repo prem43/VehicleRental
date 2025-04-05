@@ -1,0 +1,184 @@
+﻿@model VehicleRental.Models.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Sign Up";
+}
+
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h2 class="gradient-text">Create Account</h2>
+            <p>Join us to start your journey</p>
+        </div>
+
+        <form asp-action="Register" method="post" class="auth-form">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="FirstName" class="form-label"></label>
+                        <input asp-for="FirstName" class="form-control" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="LastName" class="form-label"></label>
+                        <input asp-for="LastName" class="form-control" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Password" class="form-label"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ConfirmPassword" class="form-label"></label>
+                <input asp-for="ConfirmPassword" class="form-control" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Role" class="form-label"></label>
+                <select asp-for="Role" class="form-select" id="Role">
+                    <option value="User">I want to rent vehicles</option>
+                    <option value="Seller">I want to list my vehicles for rent</option>
+                </select>
+                <span asp-validation-for="Role" class="text-danger"></span>
+            </div>
+
+            <div id="sellerFields" class="d-none">
+                <div class="form-group">
+                    <label for="CompanyName" class="form-label">Company Name</label>
+                    <input type="text" class="form-control" id="CompanyName" name="CompanyName">
+                </div>
+                <div class="form-group">
+                    <label for="TaxId" class="form-label">Tax ID</label>
+                    <input type="text" class="form-control" id="TaxId" name="TaxId">
+                </div>
+            </div>
+
+            <div class="form-check mb-4">
+                <input type="checkbox" class="form-check-input" id="termsAgree" required>
+                <label class="form-check-label" for="termsAgree">
+                    I agree to the <a href="#" class="text-primary">Terms of Service</a> and <a href="#" class="text-primary">Privacy Policy</a>
+                </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block btn-glow">
+                <i class="fas fa-user-plus me-2"></i> Create Account
+            </button>
+
+            <div class="auth-footer text-center mt-4">
+                Already have an account? <a asp-action="Login" class="text-primary">Sign in</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+    <style>
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1502877338535-766e1452684a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') center/cover no-repeat;
+        }
+
+        .auth-card {
+            background: rgba(18, 18, 18, 0.9);
+            border-radius: 10px;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+            .auth-header h2 {
+                font-weight: 700;
+                margin-bottom: 0.5rem;
+            }
+
+            .auth-header p {
+                color: rgba(255, 255, 255, 0.7);
+            }
+
+        .auth-form .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            color: white;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .form-control, .form-select {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 0.75rem 1rem;
+            width: 100%;
+            border-radius: 5px;
+        }
+
+            .form-control:focus, .form-select:focus {
+                background: rgba(0, 0, 0, 0.5);
+                border-color: var(--primary-color);
+                color: white;
+                box-shadow: 0 0 0 0.25rem rgba(110, 69, 226, 0.25);
+            }
+
+        .btn-block {
+            width: 100%;
+            padding: 0.75rem;
+        }
+
+        .auth-footer {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        @@media (max-width: 576px) {
+            .auth-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function() {
+            $('#Role').change(function() {
+                if ($(this).val() === 'Seller') {
+                    $('#sellerFields').removeClass('d-none');
+                    $('#CompanyName, #TaxId').prop('required', true);
+                } else {
+                    $('#sellerFields').addClass('d-none');
+                    $('#CompanyName, #TaxId').prop('required', false);
+                }
+            });
+        });
+    </script>
+}

@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+<!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="utf-8" />
@@ -11,7 +14,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.core.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lightgallery.min.css" />
 </head>
 <body>
     <!-- 3D Animated Navbar -->
@@ -32,11 +34,39 @@
                 <div class="offcanvas-body">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active" href="#home">Home</a>
+                            <a class="nav-link active" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#vehicles">Vehicles</a>
-                        </li>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            var user = await UserManager.GetUserAsync(User);
+                            if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Admin" asp-action="Index">Admin Dashboard</a>
+                                </li>
+                            }
+                            else if (User.IsInRole("Seller"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Seller" asp-action="Index">Seller Dashboard</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Vehicles" asp-action="MyVehicles">My Vehicles</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Vehicles" asp-action="Index">Rent a Vehicle</a>
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Vehicles" asp-action="Index">Vehicles</a>
+                            </li>
+                        }
                         <li class="nav-item">
                             <a class="nav-link" href="#features">Features</a>
                         </li>
@@ -47,13 +77,38 @@
                             <a class="nav-link" href="#contact">Contact</a>
                         </li>
                     </ul>
+
                     <div class="d-flex ms-lg-3">
-                        <a class="btn btn-outline-light btn-glow me-2" asp-controller="Account" asp-action="Login">
-                            <i class="fas fa-sign-in-alt me-1"></i> Sign In
-                        </a>
-                        <a class="btn btn-primary btn-glow" asp-controller="Account" asp-action="Register">
-                            <i class="fas fa-user-plus me-1"></i> Sign Up
-                        </a>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <div class="dropdown">
+                                <button class="btn btn-outline-light btn-glow dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-user-circle me-1"></i> @User.Identity?.Name
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                                    <li><a class="dropdown-item" asp-controller="Account" asp-action="Profile"><i class="fas fa-user me-2"></i>Profile</a></li>
+                                    @if (User.IsInRole("Seller"))
+                                    {
+                                        <li><a class="dropdown-item" asp-controller="Account" asp-action="SellerSettings"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                                    }
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <form class="form-inline" asp-controller="Account" asp-action="Logout">
+                                            <button type="submit" class="dropdown-item"><i class="fas fa-sign-out-alt me-2"></i>Logout</button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+                        else
+                        {
+                            <a class="btn btn-outline-light btn-glow me-2" asp-controller="Account" asp-action="Login">
+                                <i class="fas fa-sign-in-alt me-1"></i> Sign In
+                            </a>
+                            <a class="btn btn-primary btn-glow" asp-controller="Account" asp-action="Register">
+                                <i class="fas fa-user-plus me-1"></i> Sign Up
+                            </a>
+                        }
                     </div>
                 </div>
             </div>
@@ -82,8 +137,8 @@
                 <div class="col-lg-2 col-md-4">
                     <h5 class="text-light mb-4">Quick Links</h5>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><a href="#home" class="text-muted">Home</a></li>
-                        <li class="mb-2"><a href="#vehicles" class="text-muted">Vehicles</a></li>
+                        <li class="mb-2"><a asp-controller="Home" asp-action="Index" class="text-muted">Home</a></li>
+                        <li class="mb-2"><a asp-controller="Vehicles" asp-action="Index" class="text-muted">Vehicles</a></li>
                         <li class="mb-2"><a href="#features" class="text-muted">Features</a></li>
                         <li class="mb-2"><a href="#testimonials" class="text-muted">Testimonials</a></li>
                         <li><a href="#contact" class="text-muted">Contact</a></li>
@@ -129,10 +184,46 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/glide.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/lightgallery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        // Initialize AOS animations
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true
+        });
+
+        // Back to top button
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 300) {
+                $('.back-to-top').addClass('show');
+            } else {
+                $('.back-to-top').removeClass('show');
+            }
+        });
+
+        $('.back-to-top').click(function() {
+            $('html, body').animate({scrollTop: 0}, 'smooth');
+            return false;
+        });
+
+        // Seller fields toggle for registration
+        $(document).ready(function() {
+            $('#Role').change(function() {
+                if ($(this).val() === 'Seller') {
+                    $('#sellerFields').removeClass('d-none');
+                    $('#CompanyName, #TaxId').prop('required', true);
+                } else {
+                    $('#sellerFields').addClass('d-none');
+                    $('#CompanyName, #TaxId').prop('required', false);
+                }
+            });
+        });
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -430,3 +430,85 @@ body {
         font-size: 2rem;
     }
 }
+
+/* Authentication Modal Styles */
+.modal-content {
+    border: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+.auth-modal-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #6e45e2, #88d3ce);
+    opacity: 0.1;
+    z-index: 0;
+}
+
+.modal-header {
+    padding: 1.5rem;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-title {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.nav-tabs {
+    border-bottom: none;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+    .nav-tabs .nav-link {
+        color: rgba(255, 255, 255, 0.7);
+        border: none;
+        border-radius: 0;
+        transition: all 0.3s ease;
+    }
+
+        .nav-tabs .nav-link:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-tabs .nav-link.active {
+            color: white;
+            background: transparent;
+            border-bottom: 3px solid var(--primary-color);
+            font-weight: 500;
+        }
+
+.tab-content {
+    background: rgba(18, 18, 18, 0.8);
+}
+
+.form-control, .form-select {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 0.75rem 1rem;
+}
+
+    .form-control:focus, .form-select:focus {
+        background: rgba(0, 0, 0, 0.5);
+        border-color: var(--primary-color);
+        color: white;
+        box-shadow: 0 0 0 0.25rem rgba(110, 69, 226, 0.25);
+    }
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+    .modal-dialog {
+        margin: 0.5rem;
+    }
+
+    .nav-tabs .nav-link {
+        padding: 0.75rem;
+        font-size: 0.9rem;
+    }
+}
