@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace VehicleRental.Models
+namespace VehicleRental.Models.AccountModels
 {
-    public class RegisterViewModel
+    public class RegisterModel
     {
         [Required]
         [EmailAddress]
@@ -31,19 +31,9 @@ namespace VehicleRental.Models
         [Required]
         [Display(Name = "Role")]
         public string Role { get; set; } // "Admin", "User", or "Seller"
-    }
 
-    public class LoginViewModel
-    {
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
-
-        [Required]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
-
-        [Display(Name = "Remember me?")]
-        public bool RememberMe { get; set; }
+        // Seller specific properties
+        public string CompanyName { get; set; }
+        public string TaxId { get; set; }
     }
 }

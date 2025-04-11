@@ -1,4 +1,4 @@
-﻿@model VehicleRental.Models.LoginViewModel
+﻿@model VehicleRental.Models.AccountModels.LoginModel
 
 @{
     ViewData["Title"] = "Sign In";
@@ -7,130 +7,396 @@
 <div class="auth-container">
     <div class="auth-card">
         <div class="auth-header">
-            <h2 class="gradient-text">Welcome Back!</h2>
-            <p>Sign in to access your account</p>
+            <div class="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" />
+                </svg>
+            </div>
+            <h1 class="gradient-text">Welcome Back!</h1>
+            <p class="subtitle">Sign in to access your account</p>
         </div>
 
         <form asp-action="Login" method="post" class="auth-form">
+            <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="form-group">
-                <label asp-for="Email" class="form-label"></label>
-                <input asp-for="Email" class="form-control" />
+            <div class="form-group floating">
+                <input asp-for="Email" class="form-control" placeholder=" " />
+                <label asp-for="Email"></label>
                 <span asp-validation-for="Email" class="text-danger"></span>
+                <div class="form-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                    </svg>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Password" class="form-label"></label>
-                <input asp-for="Password" class="form-control" />
+            <div class="form-group floating">
+                <input asp-for="Password" type="password" class="form-control" placeholder=" " />
+                <label asp-for="Password"></label>
                 <span asp-validation-for="Password" class="text-danger"></span>
+                <div class="form-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" />
+                    </svg>
+                </div>
+                <button type="button" class="password-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+                    </svg>
+                </button>
             </div>
 
-            <div class="form-check mb-4">
-                <input asp-for="RememberMe" class="form-check-input" />
-                <label asp-for="RememberMe" class="form-check-label"></label>
+            <div class="form-options">
+                <div class="form-check">
+                    <input asp-for="RememberMe" class="form-check-input" />
+                    <label asp-for="RememberMe" class="form-check-label"></label>
+                </div>
+                <a asp-action="ForgotPassword" class="forgot-password">Forgot password?</a>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-block btn-glow">
-                <i class="fas fa-sign-in-alt me-2"></i> Sign In
+            <button type="submit" class="btn btn-primary btn-block">
+                <span class="btn-content">Sign In</span>
+                <span class="btn-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M10 17l5-5-5-5v10z" />
+                    </svg>
+                </span>
             </button>
 
-            <div class="text-center mt-3">
-                <a asp-action="ForgotPassword" class="text-muted">Forgot your password?</a>
-            </div>
-
             <div class="divider">
-                <span>or</span>
+                <span>or continue with</span>
             </div>
 
             <div class="social-auth">
-                <button type="button" class="btn btn-outline-light btn-block mb-2">
-                    <i class="fab fa-google me-2"></i> Continue with Google
+                <button type="button" class="btn btn-google">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
+                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
+                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
+                    </svg>
+                    Google
                 </button>
-                <button type="button" class="btn btn-outline-light btn-block">
-                    <i class="fab fa-facebook-f me-2"></i> Continue with Facebook
+                <button type="button" class="btn btn-facebook">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z" />
+                    </svg>
+                    Facebook
                 </button>
             </div>
 
-            <div class="auth-footer text-center mt-4">
-                Don't have an account? <a asp-action="Register" class="text-primary">Sign up</a>
+            <div class="auth-footer">
+                Don't have an account? <a asp-action="Register" class="auth-link">Sign up</a>
             </div>
         </form>
     </div>
 </div>
 
-    <style>
-        .auth-container {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
-                        url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') center/cover no-repeat;
+<!-- Your existing CSS styles remain exactly the same -->
+<style>
+    :root {
+        --primary-color: #6e45e2;
+        --secondary-color: #88d3ce;
+        --dark-color: #121212;
+        --light-color: #f8f9fa;
+        --gray-color: #6c757d;
+        --danger-color: #dc3545;
+        --google-color: #4285F4;
+        --facebook-color: #1877F2;
+        --transition: all 0.3s ease;
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: var(--light-color);
+        background-color: var(--dark-color);
+    }
+
+    .auth-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        background: linear-gradient(135deg, rgba(30, 30, 30, 0.95), rgba(50, 50, 50, 0.95)), url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') center/cover no-repeat;
+    }
+
+    .auth-card {
+        background: rgba(25, 25, 25, 0.95);
+        border-radius: 16px;
+        padding: 2.5rem;
+        width: 100%;
+        max-width: 450px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        transform: translateY(0);
+        transition: var(--transition);
+    }
+
+        .auth-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
 
-        .auth-card {
-            background: rgba(18, 18, 18, 0.9);
-            border-radius: 10px;
-            padding: 2.5rem;
-            width: 100%;
-            max-width: 450px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+    .auth-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .logo {
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border-radius: 50%;
+        padding: 0.5rem;
+    }
+
+        .logo svg {
+            width: 30px;
+            height: 30px;
+            fill: white;
         }
 
-        .auth-header {
-            text-align: center;
-            margin-bottom: 2rem;
+    .auth-header h1 {
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        font-size: 1.8rem;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .subtitle {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.95rem;
+    }
+
+    .auth-form {
+        margin-top: 1.5rem;
+    }
+
+    .form-group {
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
+
+        .form-group.floating {
+            position: relative;
         }
 
-        .auth-header h2 {
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .auth-header p {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .auth-form .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-label {
-            color: white;
-            margin-bottom: 0.5rem;
-            display: block;
-        }
-
-        .form-control {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            padding: 0.75rem 1rem;
-            width: 100%;
-            border-radius: 5px;
-        }
+    .form-control {
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
+        padding: 1rem 1rem 1rem 3rem;
+        width: 100%;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: var(--transition);
+        height: 56px;
+    }
 
         .form-control:focus {
             background: rgba(0, 0, 0, 0.5);
             border-color: var(--primary-color);
             color: white;
-            box-shadow: 0 0 0 0.25rem rgba(110, 69, 226, 0.25);
+            box-shadow: 0 0 0 2px rgba(110, 69, 226, 0.3);
+            outline: none;
         }
 
-        .btn-block {
-            width: 100%;
-            padding: 0.75rem;
+    .form-group.floating label {
+        position: absolute;
+        top: 1rem;
+        left: 3rem;
+        color: rgba(255, 255, 255, 0.7);
+        pointer-events: none;
+        transition: var(--transition);
+        font-size: 1rem;
+    }
+
+    .form-group.floating .form-control:focus ~ label,
+    .form-group.floating .form-control:not(:placeholder-shown) ~ label {
+        top: -0.5rem;
+        left: 3rem;
+        font-size: 0.75rem;
+        background: var(--dark-color);
+        padding: 0 0.5rem;
+        color: var(--primary-color);
+    }
+
+    .form-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+        .form-icon svg {
+            width: 20px;
+            height: 20px;
         }
 
-        .divider {
-            display: flex;
-            align-items: center;
-            margin: 1.5rem 0;
-            color: rgba(255, 255, 255, 0.5);
+    .password-toggle {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        padding: 0.5rem;
+        transition: var(--transition);
+    }
+
+        .password-toggle:hover {
+            color: var(--primary-color);
         }
+
+        .password-toggle svg {
+            width: 20px;
+            height: 20px;
+        }
+
+    .form-options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-check {
+        display: flex;
+        align-items: center;
+    }
+
+    .form-check-input {
+        width: 18px;
+        height: 18px;
+        margin-right: 0.5rem;
+        background-color: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        appearance: none;
+        -webkit-appearance: none;
+        border-radius: 4px;
+        transition: var(--transition);
+        position: relative;
+        cursor: pointer;
+    }
+
+        .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+            .form-check-input:checked::after {
+                content: "";
+                position: absolute;
+                left: 6px;
+                top: 2px;
+                width: 5px;
+                height: 10px;
+                border: solid white;
+                border-width: 0 2px 2px 0;
+                transform: rotate(45deg);
+            }
+
+    .form-check-label {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.9rem;
+        cursor: pointer;
+    }
+
+    .forgot-password {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.9rem;
+        text-decoration: none;
+        transition: var(--transition);
+    }
+
+        .forgot-password:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        text-align: center;
+        text-decoration: none;
+        cursor: pointer;
+        transition: var(--transition);
+        border: none;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-block {
+        width: 100%;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        box-shadow: 0 4px 15px rgba(110, 69, 226, 0.4);
+    }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(110, 69, 226, 0.6);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+    .btn-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .btn-icon {
+        margin-left: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 2;
+    }
+
+        .btn-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+
+    .divider {
+        display: flex;
+        align-items: center;
+        margin: 1.5rem 0;
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.8rem;
+        text-transform: uppercase;
+    }
 
         .divider::before,
         .divider::after {
@@ -147,25 +413,143 @@
             margin-left: 1rem;
         }
 
-        .social-auth .btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+    .social-auth {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .btn-google, .btn-facebook {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        padding: 0.75rem;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: var(--transition);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.05);
+        color: white;
+    }
+
+        .btn-google:hover {
+            background: rgba(66, 133, 244, 0.1);
+            border-color: var(--google-color);
+            color: var(--google-color);
         }
 
-        .auth-footer {
-            color: rgba(255, 255, 255, 0.7);
+        .btn-facebook:hover {
+            background: rgba(24, 119, 242, 0.1);
+            border-color: var(--facebook-color);
+            color: var(--facebook-color);
         }
 
-        @@media (max-width: 576px) {
-            .auth-card {
-                padding: 1.5rem;
-            }
+        .btn-google svg, .btn-facebook svg {
+            width: 20px;
+            height: 20px;
         }
-    </style>
+
+    .auth-footer {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.9rem;
+        text-align: center;
+        margin-top: 1.5rem;
+    }
+
+    .auth-link {
+        color: var(--primary-color);
+        font-weight: 600;
+        text-decoration: none;
+        transition: var(--transition);
+    }
+
+        .auth-link:hover {
+            text-decoration: underline;
+        }
+
+    .text-danger {
+        color: var(--danger-color);
+        font-size: 0.8rem;
+        margin-top: 0.25rem;
+        display: block;
+    }
+
+    @@media (max-width: 576px) {
+        .auth-card {
+            padding: 1.5rem;
+        }
+
+        .auth-header h1 {
+            font-size: 1.5rem;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+        }
+    }
+
+    /* Animation */
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .auth-card {
+        animation: fadeIn 0.6s ease forwards;
+    }
+</style>
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Password toggle functionality
+            const passwordToggles = document.querySelectorAll('.password-toggle');
+            passwordToggles.forEach(toggle => {
+                toggle.addEventListener('click', function() {
+                    const input = this.closest('.form-group').querySelector('input');
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        this.innerHTML = `
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 6.5c3.79 0 7.17 2.13 8.82 5.5-1.65 3.37-5.02 5.5-8.82 5.5S4.83 15.37 3.18 12C4.83 8.63 8.21 6.5 12 6.5m0-2C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zm0 5c1.38 0 2.5 1.12 2.5 2.5s-1.12 2.5-2.5 2.5-2.5-1.12-2.5-2.5 1.12-2.5 2.5-2.5m0-2c-2.48 0-4.5 2.02-4.5 4.5s2.02 4.5 4.5 4.5 4.5-2.02 4.5-4.5-2.02-4.5-4.5-4.5z"/>
+                            </svg>
+                        `;
+                    } else {
+                        input.type = 'password';
+                        this.innerHTML = `
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                            </svg>
+                        `;
+                    }
+                });
+            });
+
+            // Form input animations
+            const inputs = document.querySelectorAll('.form-control');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.classList.add('focused');
+                });
+                input.addEventListener('blur', function() {
+                    if (this.value === '') {
+                        this.parentElement.classList.remove('focused');
+                    }
+                });
+            });
+        });
+    </script>
 }

@@ -1,6 +1,5 @@
-﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<ApplicationUser> SignInManager
-@inject UserManager<ApplicationUser> UserManager
+﻿@using System.Security.Claims
+@inject VehicleRental.Services.IServices.IAccountService AccountService
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
 <head>
@@ -36,16 +35,16 @@
                         <li class="nav-item">
                             <a class="nav-link active" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        @if (SignInManager.IsSignedIn(User))
+                        @if (User.Identity.IsAuthenticated)
                         {
-                            var user = await UserManager.GetUserAsync(User);
-                            if (User.IsInRole("Admin"))
+                            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+                            if (role == "Admin")
                             {
                                 <li class="nav-item">
                                     <a class="nav-link" asp-controller="Admin" asp-action="Index">Admin Dashboard</a>
                                 </li>
                             }
-                            else if (User.IsInRole("Seller"))
+                            else if (role == "Seller")
                             {
                                 <li class="nav-item">
                                     <a class="nav-link" asp-controller="Seller" asp-action="Index">Seller Dashboard</a>
@@ -79,15 +78,15 @@
                     </ul>
 
                     <div class="d-flex ms-lg-3">
-                        @if (SignInManager.IsSignedIn(User))
+                        @if (User.Identity.IsAuthenticated)
                         {
                             <div class="dropdown">
                                 <button class="btn btn-outline-light btn-glow dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-user-circle me-1"></i> @User.Identity?.Name
+                                    <i class="fas fa-user-circle me-1"></i> @User.Identity.Name
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
                                     <li><a class="dropdown-item" asp-controller="Account" asp-action="Profile"><i class="fas fa-user me-2"></i>Profile</a></li>
-                                    @if (User.IsInRole("Seller"))
+                                    @if (User.FindFirst(ClaimTypes.Role)?.Value == "Seller")
                                     {
                                         <li><a class="dropdown-item" asp-controller="Account" asp-action="SellerSettings"><i class="fas fa-cog me-2"></i>Settings</a></li>
                                     }
