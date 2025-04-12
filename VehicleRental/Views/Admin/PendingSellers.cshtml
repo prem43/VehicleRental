@@ -1,0 +1,122 @@
+﻿@model List<VehicleRental.Models.AdminModels.SellerApprovalModel>
+@{
+    ViewData["Title"] = "Pending Seller Approvals";
+    Layout = "_AdminLayout";
+}
+
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Pending Seller Approvals</h1>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Seller Requests</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Company</th>
+                            <th>Tax ID</th>
+                            <th>Registered</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var seller in Model)
+                        {
+                            <tr>
+                                <td>@seller.FullName</td>
+                                <td>@seller.Email</td>
+                                <td>@seller.CompanyName</td>
+                                <td>@seller.TaxId</td>
+                                <td>@seller.RegistrationDate.ToString("d")</td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-success btn-sm" onclick="processApproval(@seller.UserId, 'Seller', 'Approve')">
+                                            Approve
+                                        </button>
+                                        <button class="btn btn-warning btn-sm" onclick="processApproval(@seller.UserId, 'Seller', 'UnderObservation')">
+                                            Review
+                                        </button>
+                                        <button class="btn btn-danger btn-sm" onclick="processApproval(@seller.UserId, 'Seller', 'Reject')">
+                                            Reject
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="approvalModal" tabindex="-1" role="dialog" aria-labelledby="approvalModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="approvalModalLabel">Add Notes</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="approvalForm">
+                    <input type="hidden" id="targetId" name="targetId">
+                    <input type="hidden" id="targetType" name="targetType">
+                    <input type="hidden" id="action" name="action">
+                    <div class="form-group">
+                        <label for="notes">Notes (Optional)</label>
+                        <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="submitApproval()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function processApproval(targetId, targetType, action) {
+            $('#targetId').val(targetId);
+            $('#targetType').val(targetType);
+            $('#action').val(action);
+            $('#approvalModal').modal('show');
+        }
+
+        function submitApproval() {
+            var formData = {
+                TargetId: $('#targetId').val(),
+                TargetType: $('#targetType').val(),
+                Action: $('#action').val(),
+                Notes: $('#notes').val()
+            };
+
+            $.ajax({
+                url: '/Admin/ProcessApproval',
+                type: 'POST',
+                data: formData,
+                headers: {
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function (response) {
+                    $('#approvalModal').modal('hide');
+                    location.reload();
+                },
+                error: function (error) {
+                    alert('Error processing approval');
+                }
+            });
+        }
+    </script>
+}

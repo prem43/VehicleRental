@@ -6,6 +6,7 @@ using VehicleRental.Repositories;
 using VehicleRental.Repositories.IRepositories;
 using VehicleRental.Services;
 using VehicleRental.Services.IServices;
+using Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,11 @@ builder.Services.AddScoped<IDatabaseHelper, DatabaseHelper>();
 // Register repositories and services
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+// Add Admin Service
+builder.Services.AddScoped<IAdminService, AdminService>();
+
+// Configure AdminLTE
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 // Add authentication
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

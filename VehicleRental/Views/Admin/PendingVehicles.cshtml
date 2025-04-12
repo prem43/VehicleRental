@@ -1,0 +1,81 @@
+﻿@model List<VehicleRental.Models.AdminModels.VehicleApprovalModel>
+@{
+    ViewData["Title"] = "Pending Vehicle Approvals";
+    Layout = "_AdminLayout";
+}
+
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Pending Vehicle Approvals</h1>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Vehicle Requests</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Vehicle</th>
+                            <th>Seller</th>
+                            <th>Submitted</th>
+                            <th>Documents</th>
+                            <th>Images</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var vehicle in Model)
+                        {
+                            <tr>
+                                <td>@vehicle.Year @vehicle.Make @vehicle.Model</td>
+                                <td>@vehicle.SellerName<br />@vehicle.SellerEmail</td>
+                                <td>@vehicle.SubmissionDate.ToString("d")</td>
+                                <td>
+                                    @foreach (var doc in vehicle.DocumentUrls)
+                                    {
+                                        <a href="@doc" target="_blank" class="btn btn-sm btn-info mb-1">View Doc</a>
+                                    }
+                                </td>
+                                <td>
+                                    @foreach (var img in vehicle.ImageUrls.Take(2))
+                                    {
+                                        <a href="@img" target="_blank">
+                                            <img src="@img" height="50" class="mr-1 mb-1" />
+                                        </a>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-success btn-sm" onclick="processApproval(@vehicle.VehicleId, 'Vehicle', 'Approve')">
+                                            Approve
+                                        </button>
+                                        <button class="btn btn-warning btn-sm" onclick="processApproval(@vehicle.VehicleId, 'Vehicle', 'UnderObservation')">
+                                            Review
+                                        </button>
+                                        <button class="btn btn-danger btn-sm" onclick="processApproval(@vehicle.VehicleId, 'Vehicle', 'Reject')">
+                                            Reject
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Same modal as in PendingSellers.cshtml -->
+<div class="modal fade" id="approvalModal" tabindex="-1" role="dialog" aria-labelledby="approvalModalLabel" aria-hidden="true">
+    <!-- Modal content same as PendingSellers.cshtml -->
+</div>
+
+@section Scripts {
+    <script>
+        // Same script as in PendingSellers.cshtml
+    </script>
+}

@@ -1,0 +1,274 @@
+﻿@model VehicleRental.Models.AdminModels.AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = "_AdminLayout";
+}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Dashboard</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Dashboard</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3>6</h3>
+                        <p>Pending Seller Approvals</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-user-clock"></i>
+                    </div>
+                    <a asp-action="PendingSellers" class="small-box-footer">
+                        More info <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-warning">
+                    <div class="inner">
+                        <h3>3</h3>
+                        <p>Pending Vehicle Approvals</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <a asp-action="PendingVehicles" class="small-box-footer">
+                        More info <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3>24</h3>
+                        <p>Active Users</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <a asp-action="UserManagement" class="small-box-footer">
+                        More info <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-danger">
+                    <div class="inner">
+                        <h3>15</h3>
+                        <p>Total Vehicles</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-car-side"></i>
+                    </div>
+                    <a asp-action="PendingVehicles" class="small-box-footer">
+                        More info <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- ./col -->
+        </div>
+        <!-- /.row -->
+        <!-- Main row -->
+        <div class="row">
+            <!-- Left col -->
+            <section class="col-lg-7 connectedSortable">
+                <!-- Custom tabs (Charts)-->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-chart-pie mr-1"></i>
+                            Monthly Registrations
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content p-0">
+                            <canvas id="registrationsChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card -->
+                <!-- Recent Activities -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-history mr-1"></i>
+                            Recent Activities
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover text-nowrap">
+                                <thead>
+                                    <tr>
+                                        <th>Action</th>
+                                        <th>User</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Seller Approved</td>
+                                        <td>john.doe@example.com</td>
+                                        <td>@DateTime.Now.AddHours(-1).ToString("g")</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Vehicle Rejected</td>
+                                        <td>jane.smith@example.com</td>
+                                        <td>@DateTime.Now.AddHours(-2).ToString("g")</td>
+                                    </tr>
+                                    <tr>
+                                        <td>User Suspended</td>
+                                        <td>mike.jones@example.com</td>
+                                        <td>@DateTime.Now.AddHours(-3).ToString("g")</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Vehicle Approved</td>
+                                        <td>sarah.wilson@example.com</td>
+                                        <td>@DateTime.Now.AddHours(-4).ToString("g")</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right col -->
+            <section class="col-lg-5 connectedSortable">
+                <!-- Quick Actions -->
+                <div class="card bg-gradient-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-bolt mr-1"></i>
+                            Quick Actions
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <button class="btn btn-block btn-outline-light mb-3">
+                                    <i class="fas fa-user-plus mr-2"></i>Add User
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-block btn-outline-light mb-3">
+                                    <i class="fas fa-car mr-2"></i>Add Vehicle
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-block btn-outline-light mb-3">
+                                    <i class="fas fa-file-invoice-dollar mr-2"></i>Generate Report
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-block btn-outline-light mb-3">
+                                    <i class="fas fa-cog mr-2"></i>Settings
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Approved Vehicles -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-car mr-1"></i>
+                            Recently Approved Vehicles
+                        </h3>
+                    </div>
+                    <div class="card-body p-0">
+                        <ul class="products-list product-list-in-card pl-2 pr-2">
+                            <li class="item">
+                                <div class="product-img">
+                                    <img src="https://via.placeholder.com/50x30/007bff/ffffff?text=BMW" alt="Product Image" class="img-size-50">
+                                </div>
+                                <div class="product-info">
+                                    <a href="javascript:void(0)" class="product-title">
+                                        2023 BMW X5
+                                        <span class="badge badge-success float-right">Approved</span>
+                                    </a>
+                                    <span class="product-description">
+                                        Approved: @DateTime.Now.AddDays(-1).ToString("d")
+                                    </span>
+                                </div>
+                            </li>
+                            <li class="item">
+                                <div class="product-img">
+                                    <img src="https://via.placeholder.com/50x30/28a745/ffffff?text=Audi" alt="Product Image" class="img-size-50">
+                                </div>
+                                <div class="product-info">
+                                    <a href="javascript:void(0)" class="product-title">
+                                        2022 Audi A4
+                                        <span class="badge badge-success float-right">Approved</span>
+                                    </a>
+                                    <span class="product-description">
+                                        Approved: @DateTime.Now.AddDays(-2).ToString("d")
+                                    </span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        // Registration Chart
+        var ctx = document.getElementById('registrationsChart').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: 'Users',
+                    backgroundColor: '#007bff',
+                    data: [12, 19, 15, 27, 34, 42, 38, 45, 52, 60, 55, 68]
+                }, {
+                    label: 'Sellers',
+                    backgroundColor: '#28a745',
+                    data: [5, 8, 7, 12, 15, 18, 16, 20, 22, 25, 23, 30]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Monthly User Registrations'
+                    }
+                }
+            }
+        });
+    </script>
+}

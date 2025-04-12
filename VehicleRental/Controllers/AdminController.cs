@@ -1,17 +1,63 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using VehicleRental.Models;
+using System.Security.Claims;
+using VehicleRental.Models.AdminModels;
+using VehicleRental.Services.IServices;
 
 namespace VehicleRental.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
-        public IActionResult Index()
+        private readonly IAdminService _adminService;
+
+        public AdminController(IAdminService adminService)
         {
-            return View();
+            _adminService = adminService;
         }
 
-        // Add other admin-specific actions here
+        public async Task<IActionResult> Index()
+        {
+            var dashboardData = await _adminService.GetDashboardData();
+            return View(dashboardData);
+        }
+
+        public async Task<IActionResult> PendingSellers()
+        {
+            var sellers = await _adminService.GetPendingSellers();
+            return View(sellers);
+        }
+
+        public async Task<IActionResult> PendingVehicles()
+        {
+            var vehicles = await _adminService.GetPendingVehicles();
+            return View(vehicles);
+        }
+
+        public async Task<IActionResult> UserManagement()
+        {
+            var users = await _adminService.GetAllUsers();
+            return View(users);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ProcessApproval(ApprovalActionModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var adminId = int.Parse(User.FindFirstValue("UserId"));
+            var result = await _adminService.ProcessApproval(model, adminId);
+
+            if (result)
+            {
+                return RedirectToAction(model.TargetType == "Seller" ? "PendingSellers" : "PendingVehicles");
+            }
+
+            return BadRequest("Approval processing failed");
+        }
     }
 }
