@@ -93,6 +93,21 @@
                                 <p>User Management</p>
                             </a>
                         </li>
+                        <!-- In the sidebar menu -->
+                        <li class="nav-item">
+                            <a asp-controller="Admin" asp-action="PendingSellers" class="nav-link">
+                                <i class="nav-icon fas fa-user-clock"></i>
+                                <p>Pending Sellers</p>
+                                <span class="badge badge-info right pending-sellers-count">0</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Admin" asp-action="PendingVehicles" class="nav-link">
+                                <i class="nav-icon fas fa-car"></i>
+                                <p>Pending Vehicles</p>
+                                <span class="badge badge-warning right pending-vehicles-count">0</span>
+                            </a>
+                        </li>
                     </ul>
                 </nav>
             </div>
@@ -131,5 +146,15 @@
     <script src="~/js/admin.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
+    <!-- At the bottom of the file before </body> -->
+    <script>
+        $(document).ready(function() {
+            // Fetch and update pending counts
+            $.get('/Admin/GetPendingCounts', function(data) {
+                $('.pending-sellers-count').text(data.pendingSellers);
+                $('.pending-vehicles-count').text(data.pendingVehicles);
+            });
+        });
+    </script>
 </body>
 </html>

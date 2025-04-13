@@ -16,14 +16,13 @@ namespace VehicleRental.Services
         {
             _databaseHelper = databaseHelper;
         }
-
         public async Task<AdminDashboardViewModel> GetDashboardData()
         {
             using (var connection = _databaseHelper.GetConnection)
             {
                 var dashboardData = new AdminDashboardViewModel();
 
-                // Get counts
+                // Get counts (unchanged)
                 dashboardData.PendingSellerCount = await connection.ExecuteScalarAsync<int>(
                     "SELECT COUNT(*) FROM UserMaster WHERE RoleId = (SELECT RoleId FROM UserRole WHERE RoleName = 'Seller') AND Status = 'Pending'");
 
@@ -36,17 +35,60 @@ namespace VehicleRental.Services
                 dashboardData.TotalVehiclesCount = await connection.ExecuteScalarAsync<int>(
                     "SELECT COUNT(*) FROM Vehicles");
 
-                // Get recent activities
+                // Get recent activities (unchanged)
                 dashboardData.RecentActivities = (await connection.QueryAsync<RecentActivity>(
                     @"SELECT TOP 5 a.ActionType AS Action, a.ActionDate AS Date, u.Email AS UserEmail
-                      FROM AdminActions a
-                      JOIN UserMaster u ON a.TargetId = u.U_Id
-                      ORDER BY a.ActionDate DESC")).ToList();
+              FROM AdminActions a
+              JOIN UserMaster u ON a.TargetId = u.U_Id
+              ORDER BY a.ActionDate DESC")).ToList();
+
+                // Fixed query for recently approved vehicles
+                dashboardData.RecentlyApprovedVehicles = (await connection.QueryAsync<RecentlyApprovedVehicle>(
+                    @"SELECT TOP 2 v.VehicleId, v.Make, v.Model, v.Year, v.ApprovedDate AS ApprovalDate
+              FROM Vehicles v
+              WHERE v.Status = 'Approved'
+              ORDER BY v.ApprovedDate DESC")).ToList();
+
+                // Get images for each vehicle - updated query
+                foreach (var vehicle in dashboardData.RecentlyApprovedVehicles)
+                {
+                    vehicle.ImageUrls = (await connection.QueryAsync<string>(
+                        "SELECT TOP 3 ImageUrl FROM VehicleImages WHERE VehicleId = @VehicleId",
+                        new { VehicleId = vehicle.VehicleId })).ToList();
+                }
 
                 return dashboardData;
             }
-        }
-        
+        }        //public async Task<AdminDashboardViewModel> GetDashboardData()
+        //{
+        //    using (var connection = _databaseHelper.GetConnection)
+        //    {
+        //        var dashboardData = new AdminDashboardViewModel();
+
+        //        // Get counts
+        //        dashboardData.PendingSellerCount = await connection.ExecuteScalarAsync<int>(
+        //            "SELECT COUNT(*) FROM UserMaster WHERE RoleId = (SELECT RoleId FROM UserRole WHERE RoleName = 'Seller') AND Status = 'Pending'");
+
+        //        dashboardData.PendingVehicleCount = await connection.ExecuteScalarAsync<int>(
+        //            "SELECT COUNT(*) FROM Vehicles WHERE Status = 'Pending'");
+
+        //        dashboardData.ActiveUsersCount = await connection.ExecuteScalarAsync<int>(
+        //            "SELECT COUNT(*) FROM UserMaster WHERE IsActive = 1");
+
+        //        dashboardData.TotalVehiclesCount = await connection.ExecuteScalarAsync<int>(
+        //            "SELECT COUNT(*) FROM Vehicles");
+
+        //        // Get recent activities
+        //        dashboardData.RecentActivities = (await connection.QueryAsync<RecentActivity>(
+        //            @"SELECT TOP 5 a.ActionType AS Action, a.ActionDate AS Date, u.Email AS UserEmail
+        //              FROM AdminActions a
+        //              JOIN UserMaster u ON a.TargetId = u.U_Id
+        //              ORDER BY a.ActionDate DESC")).ToList();
+
+        //        return dashboardData;
+        //    }
+        //}
+
         public async Task<List<SellerApprovalModel>> GetPendingSellers()
         {
             using (var connection = _databaseHelper.GetConnection)

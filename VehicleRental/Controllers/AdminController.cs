@@ -39,7 +39,16 @@ namespace VehicleRental.Controllers
             var users = await _adminService.GetAllUsers();
             return View(users);
         }
-
+        [HttpGet]
+        public async Task<IActionResult> GetPendingCounts()
+        {
+            var dashboardData = await _adminService.GetDashboardData();
+            return Json(new
+            {
+                pendingSellers = dashboardData.PendingSellerCount,
+                pendingVehicles = dashboardData.PendingVehicleCount
+            });
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ProcessApproval(ApprovalActionModel model)

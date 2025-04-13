@@ -30,7 +30,7 @@
                 <!-- small box -->
                 <div class="small-box bg-info">
                     <div class="inner">
-                        <h3>6</h3>
+                        <h3>@Model.PendingSellerCount</h3>
                         <p>Pending Seller Approvals</p>
                     </div>
                     <div class="icon">
@@ -46,7 +46,7 @@
                 <!-- small box -->
                 <div class="small-box bg-warning">
                     <div class="inner">
-                        <h3>3</h3>
+                        <h3>@Model.PendingVehicleCount</h3>
                         <p>Pending Vehicle Approvals</p>
                     </div>
                     <div class="icon">
@@ -62,7 +62,7 @@
                 <!-- small box -->
                 <div class="small-box bg-success">
                     <div class="inner">
-                        <h3>24</h3>
+                        <h3>@Model.ActiveUsersCount</h3>
                         <p>Active Users</p>
                     </div>
                     <div class="icon">
@@ -78,7 +78,7 @@
                 <!-- small box -->
                 <div class="small-box bg-danger">
                     <div class="inner">
-                        <h3>15</h3>
+                        <h3>@Model.TotalVehiclesCount</h3>
                         <p>Total Vehicles</p>
                     </div>
                     <div class="icon">
@@ -130,26 +130,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Seller Approved</td>
-                                        <td>john.doe@example.com</td>
-                                        <td>@DateTime.Now.AddHours(-1).ToString("g")</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Vehicle Rejected</td>
-                                        <td>jane.smith@example.com</td>
-                                        <td>@DateTime.Now.AddHours(-2).ToString("g")</td>
-                                    </tr>
-                                    <tr>
-                                        <td>User Suspended</td>
-                                        <td>mike.jones@example.com</td>
-                                        <td>@DateTime.Now.AddHours(-3).ToString("g")</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Vehicle Approved</td>
-                                        <td>sarah.wilson@example.com</td>
-                                        <td>@DateTime.Now.AddHours(-4).ToString("g")</td>
-                                    </tr>
+                                    @foreach (var activity in Model.RecentActivities)
+                                    {
+                                        <tr>
+                                            <td>@activity.Action</td>
+                                            <td>@activity.UserEmail</td>
+                                            <td>@activity.Date.ToString("g")</td>
+                                        </tr>
+                                    }
                                 </tbody>
                             </table>
                         </div>
@@ -203,34 +191,23 @@
                     </div>
                     <div class="card-body p-0">
                         <ul class="products-list product-list-in-card pl-2 pr-2">
-                            <li class="item">
-                                <div class="product-img">
-                                    <img src="https://via.placeholder.com/50x30/007bff/ffffff?text=BMW" alt="Product Image" class="img-size-50">
-                                </div>
-                                <div class="product-info">
-                                    <a href="javascript:void(0)" class="product-title">
-                                        2023 BMW X5
-                                        <span class="badge badge-success float-right">Approved</span>
-                                    </a>
-                                    <span class="product-description">
-                                        Approved: @DateTime.Now.AddDays(-1).ToString("d")
-                                    </span>
-                                </div>
-                            </li>
-                            <li class="item">
-                                <div class="product-img">
-                                    <img src="https://via.placeholder.com/50x30/28a745/ffffff?text=Audi" alt="Product Image" class="img-size-50">
-                                </div>
-                                <div class="product-info">
-                                    <a href="javascript:void(0)" class="product-title">
-                                        2022 Audi A4
-                                        <span class="badge badge-success float-right">Approved</span>
-                                    </a>
-                                    <span class="product-description">
-                                        Approved: @DateTime.Now.AddDays(-2).ToString("d")
-                                    </span>
-                                </div>
-                            </li>
+                            @foreach (var vehicle in Model.RecentlyApprovedVehicles)
+                            {
+                                <li class="item">
+                                    <div class="product-img">
+                                        <img src="@vehicle.ImageUrls.FirstOrDefault() ?? " https: //via.placeholder.com/50x30/007bff/ffffff?text =Car"" alt="Product Image" class="img-size-50">
+                                    </div>
+                                    <div class="product-info">
+                                        <a href="javascript:void(0)" class="product-title">
+                                            @vehicle.Year @vehicle.Make @vehicle.Model
+                                            <span class="badge badge-success float-right">Approved</span>
+                                        </a>
+                                        <span class="product-description">
+                                            Approved: @vehicle.ApprovalDate?.ToString("d")
+                                        </span>
+                                    </div>
+                                </li>
+                            }
                         </ul>
                     </div>
                 </div>
@@ -241,7 +218,7 @@
 
 @section Scripts {
     <script>
-        // Registration Chart
+        // Registration Chart - You'll need to add monthly data to your model
         var ctx = document.getElementById('registrationsChart').getContext('2d');
         var chart = new Chart(ctx, {
             type: 'bar',
@@ -250,11 +227,11 @@
                 datasets: [{
                     label: 'Users',
                     backgroundColor: '#007bff',
-                    data: [12, 19, 15, 27, 34, 42, 38, 45, 52, 60, 55, 68]
+                    data: [12, 19, 15, 27, 34, 42, 38, 45, 52, 60, 55, 68] // Replace with real data
                 }, {
                     label: 'Sellers',
                     backgroundColor: '#28a745',
-                    data: [5, 8, 7, 12, 15, 18, 16, 20, 22, 25, 23, 30]
+                    data: [5, 8, 7, 12, 15, 18, 16, 20, 22, 25, 23, 30] // Replace with real data
                 }]
             },
             options: {
