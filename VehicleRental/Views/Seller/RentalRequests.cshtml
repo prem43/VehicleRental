@@ -1,0 +1,190 @@
+﻿@model List<VehicleRental.Models.SellerModels.RentalRequestModel>
+@{
+    ViewData["Title"] = "Rental Requests";
+    Layout = "_SellerLayout";
+}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Rental Requests</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item active">Rental Requests</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">All Rental Requests</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="requestsTable" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Vehicle</th>
+                                        <th>Customer</th>
+                                        <th>Rental Period</th>
+                                        <th>Days</th>
+                                        <th>Total Amount</th>
+                                        <th>Status</th>
+                                        <th>Request Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var request in Model)
+                                    {
+                                        <tr>
+                                            <td>@request.VehicleName</td>
+                                            <td>@request.UserName</td>
+                                            <td>@request.StartDate.ToString("MMM d, yyyy") - @request.EndDate.ToString("MMM d, yyyy")</td>
+                                            <td>@request.RentalDays</td>
+                                            <td>@request.TotalAmount.ToString("C")</td>
+                                            <td>
+                                                <span class="badge @(request.Status == "Pending" ? "badge-warning" :
+                                                                  request.Status == "Approved" ? "badge-success" : "badge-danger")">
+                                                    @request.Status
+                                                </span>
+                                            </td>
+                                            <td>@request.RequestDate.ToString("MMM d, yyyy")</td>
+                                            <td>
+                                                @if (request.Status == "Pending")
+                                                {
+                                                    <button class="btn btn-sm btn-success approve-btn" data-id="@request.RequestId">
+                                                        <i class="fas fa-check"></i> Approve
+                                                    </button>
+                                                    <button class="btn btn-sm btn-danger reject-btn" data-id="@request.RequestId">
+                                                        <i class="fas fa-times"></i> Reject
+                                                    </button>
+                                                }
+                                                <a href="#" class="btn btn-sm btn-info" data-toggle="modal" data-target="#requestModal-@request.RequestId">
+                                                    <i class="fas fa-eye"></i> Details
+                                                </a>
+                                            </td>
+                                        </tr>
+
+                                        <!-- Request Details Modal -->
+                                        <div class="modal fade" id="requestModal-@request.RequestId" tabindex="-1" role="dialog" aria-labelledby="requestModalLabel-@request.RequestId" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="requestModalLabel-@request.RequestId">
+                                                            Rental Request Details
+                                                        </h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <h6>Vehicle Information</h6>
+                                                                <p><strong>Vehicle:</strong> @request.VehicleName</p>
+                                                                <p><strong>Rental Period:</strong> @request.StartDate.ToString("MMM d, yyyy") to @request.EndDate.ToString("MMM d, yyyy")</p>
+                                                                <p><strong>Total Days:</strong> @request.RentalDays</p>
+                                                                <p><strong>Total Amount:</strong> @request.TotalAmount.ToString("C")</p>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <h6>Customer Information</h6>
+                                                                <p><strong>Name:</strong> @request.UserName</p>
+                                                                <p><strong>Email:</strong> @request.UserEmail</p>
+                                                            </div>
+                                                        </div>
+                                                        <hr>
+                                                        <div class="row">
+                                                            <div class="col-12">
+                                                                <h6>Request Status</h6>
+                                                                <p>
+                                                                    <strong>Status:</strong>
+                                                                    <span class="badge @(request.Status == "Pending" ? "badge-warning" :
+                                                                                      request.Status == "Approved" ? "badge-success" : "badge-danger")">
+                                                                        @request.Status
+                                                                    </span>
+                                                                </p>
+                                                                <p><strong>Request Date:</strong> @request.RequestDate.ToString("f")</p>
+                                                                @if (request.Status == "Approved")
+                                                                {
+                                                                    <p><strong>Approved Date:</strong> @(request.ApprovalDate?.ToString("f") ?? "N/A")</p>
+                                                                }
+                                                                else if (request.Status == "Rejected")
+                                                                {
+                                                                    <p><strong>Rejection Reason:</strong> @(request.RejectionReason ?? "Not specified")</p>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        $(function () {
+            $('#requestsTable').DataTable({
+                "paging": true,
+                "lengthChange": true,
+                "searching": true,
+                "ordering": true,
+                "order": [[6, "desc"]], // Sort by request date by default
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+            });
+
+            // Approve/reject buttons
+            $(document).on('click', '.approve-btn', function() {
+                var requestId = $(this).data('id');
+                if (confirm('Are you sure you want to approve this rental request?')) {
+                    $.post('/Seller/ProcessRentalRequest', {
+                        RequestId: requestId,
+                        Action: 'Approve',
+                        Reason: ''
+                    }, function() {
+                        location.reload();
+                    });
+                }
+            });
+
+            $(document).on('click', '.reject-btn', function() {
+                var requestId = $(this).data('id');
+                var reason = prompt('Please enter the reason for rejection:');
+                if (reason !== null) {
+                    $.post('/Seller/ProcessRentalRequest', {
+                        RequestId: requestId,
+                        Action: 'Reject',
+                        Reason: reason
+                    }, function() {
+                        location.reload();
+                    });
+                }
+            });
+        });
+    </script>
+}

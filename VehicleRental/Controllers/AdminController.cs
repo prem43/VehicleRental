@@ -39,6 +39,19 @@ namespace VehicleRental.Controllers
             var users = await _adminService.GetAllUsers();
             return View(users);
         }
+
+        public async Task<IActionResult> RentalRequests()
+        {
+            var requests = await _adminService.GetRentalRequests();
+            return View(requests);
+        }
+
+        public async Task<IActionResult> Transactions()
+        {
+            var transactions = await _adminService.GetTransactions();
+            return View(transactions);
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetPendingCounts()
         {
@@ -46,9 +59,39 @@ namespace VehicleRental.Controllers
             return Json(new
             {
                 pendingSellers = dashboardData.PendingSellerCount,
-                pendingVehicles = dashboardData.PendingVehicleCount
+                pendingVehicles = dashboardData.PendingVehicleCount,
+                pendingRentalRequests = dashboardData.PendingRentalRequestCount
             });
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetSellerDetails(int userId)
+        {
+            var seller = await _adminService.GetSellerDetails(userId);
+            return PartialView("_SellerDetailsPartial", seller);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetVehicleDetails(int vehicleId)
+        {
+            var vehicle = await _adminService.GetVehicleDetails(vehicleId);
+            return PartialView("_VehicleDetailsPartial", vehicle);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetRentalRequestDetails(int requestId)
+        {
+            var request = await _adminService.GetRentalRequestDetails(requestId);
+            return PartialView("_RentalRequestDetailsPartial", request);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetTransactionDetails(int transactionId)
+        {
+            var transaction = await _adminService.GetTransactionDetails(transactionId);
+            return PartialView("_TransactionDetailsPartial", transaction);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ProcessApproval(ApprovalActionModel model)
@@ -58,7 +101,8 @@ namespace VehicleRental.Controllers
                 return BadRequest(ModelState);
             }
 
-            var adminId = int.Parse(User.FindFirstValue("UserId"));
+            //var adminId = int.Parse(User.FindFirstValue("UserId"));
+            var adminId = model.TargetId;
             var result = await _adminService.ProcessApproval(model, adminId);
 
             if (result)
@@ -68,5 +112,46 @@ namespace VehicleRental.Controllers
 
             return BadRequest("Approval processing failed");
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateUser(int userId, string email, string role, bool isActive)
+        {
+            var result = await _adminService.UpdateUser(userId, email, role, isActive, int.Parse(User.FindFirstValue("UserId")));
+            return RedirectToAction("UserManagement");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SuspendUser(int userId)
+        {
+            var result = await _adminService.SuspendUser(userId, int.Parse(User.FindFirstValue("UserId")));
+            return RedirectToAction("UserManagement");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ActivateUser(int userId)
+        {
+            var result = await _adminService.ActivateUser(userId, int.Parse(User.FindFirstValue("UserId")));
+            return RedirectToAction("UserManagement");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteUser(int userId)
+        {
+            var result = await _adminService.DeleteUser(userId, int.Parse(User.FindFirstValue("UserId")));
+            return RedirectToAction("UserManagement");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ProcessRentalRequest(int requestId, string action)
+        {
+            var result = await _adminService.ProcessRentalRequest(requestId, action, int.Parse(User.FindFirstValue("UserId")));
+            return Ok();
+        }
+
     }
 }

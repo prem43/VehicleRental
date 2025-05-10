@@ -4,7 +4,7 @@
     Layout = "_AdminLayout";
 }
 
-<!-- Content Header (Page header) -->
+<!-- Content Header (Page header) - Added from previous version -->
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -24,14 +24,13 @@
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid">
-        <!-- Small boxes (Stat box) -->
+        <!-- Small boxes (Stat box) - Keeping your current layout but adding icons from previous version -->
         <div class="row">
             <div class="col-lg-3 col-6">
-                <!-- small box -->
                 <div class="small-box bg-info">
                     <div class="inner">
                         <h3>@Model.PendingSellerCount</h3>
-                        <p>Pending Seller Approvals</p>
+                        <p>Pending Sellers</p>
                     </div>
                     <div class="icon">
                         <i class="fas fa-user-clock"></i>
@@ -41,13 +40,11 @@
                     </a>
                 </div>
             </div>
-            <!-- ./col -->
             <div class="col-lg-3 col-6">
-                <!-- small box -->
                 <div class="small-box bg-warning">
                     <div class="inner">
                         <h3>@Model.PendingVehicleCount</h3>
-                        <p>Pending Vehicle Approvals</p>
+                        <p>Pending Vehicles</p>
                     </div>
                     <div class="icon">
                         <i class="fas fa-car"></i>
@@ -57,9 +54,7 @@
                     </a>
                 </div>
             </div>
-            <!-- ./col -->
             <div class="col-lg-3 col-6">
-                <!-- small box -->
                 <div class="small-box bg-success">
                     <div class="inner">
                         <h3>@Model.ActiveUsersCount</h3>
@@ -73,10 +68,8 @@
                     </a>
                 </div>
             </div>
-            <!-- ./col -->
             <div class="col-lg-3 col-6">
-                <!-- small box -->
-                <div class="small-box bg-danger">
+                <div class="small-box bg-primary">
                     <div class="inner">
                         <h3>@Model.TotalVehiclesCount</h3>
                         <p>Total Vehicles</p>
@@ -89,14 +82,13 @@
                     </a>
                 </div>
             </div>
-            <!-- ./col -->
         </div>
-        <!-- /.row -->
-        <!-- Main row -->
+
+        <!-- Main row - Combined layout from both versions -->
         <div class="row">
-            <!-- Left col -->
+            <!-- Left col - Keeping your current vehicle cards but adding chart from previous version -->
             <section class="col-lg-7 connectedSortable">
-                <!-- Custom tabs (Charts)-->
+                <!-- Monthly Registrations Chart from previous version -->
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">
@@ -110,44 +102,46 @@
                         </div>
                     </div>
                 </div>
-                <!-- /.card -->
-                <!-- Recent Activities -->
+
+                <!-- Recently Approved Vehicles - Your current version with better layout -->
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">
-                            <i class="fas fa-history mr-1"></i>
-                            Recent Activities
+                            <i class="fas fa-car mr-1"></i>
+                            Recently Approved Vehicles
                         </h3>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover text-nowrap">
-                                <thead>
-                                    <tr>
-                                        <th>Action</th>
-                                        <th>User</th>
-                                        <th>Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var activity in Model.RecentActivities)
-                                    {
-                                        <tr>
-                                            <td>@activity.Action</td>
-                                            <td>@activity.UserEmail</td>
-                                            <td>@activity.Date.ToString("g")</td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
+                        <div class="row">
+                            @foreach (var vehicle in Model.RecentlyApprovedVehicles)
+                            {
+                                <div class="col-md-6 mb-3">
+                                    <div class="card">
+                                        @if (vehicle.ImageUrls.Any())
+                                        {
+                                            <img src="@vehicle.ImageUrls.First()" class="card-img-top" alt="@vehicle.Make @vehicle.Model">
+                                        }
+                                        else
+                                        {
+                                            <div class="text-center p-4 bg-light">
+                                                <i class="fas fa-car fa-5x text-muted"></i>
+                                            </div>
+                                        }
+                                        <div class="card-body">
+                                            <h5 class="card-title">@vehicle.Make @vehicle.Model (@vehicle.Year)</h5>
+                                            <p class="card-text">Approved: @vehicle.ApprovalDate?.ToString("g")</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Right col -->
+            <!-- Right col - Keeping your current activities but adding quick actions from previous version -->
             <section class="col-lg-5 connectedSortable">
-                <!-- Quick Actions -->
+                <!-- Quick Actions from previous version -->
                 <div class="card bg-gradient-primary">
                     <div class="card-header">
                         <h3 class="card-title">
@@ -181,29 +175,26 @@
                     </div>
                 </div>
 
-                <!-- Recent Approved Vehicles -->
+                <!-- Recent Activities - Your current version with better styling -->
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">
-                            <i class="fas fa-car mr-1"></i>
-                            Recently Approved Vehicles
+                            <i class="fas fa-history mr-1"></i>
+                            Recent Activities
                         </h3>
                     </div>
                     <div class="card-body p-0">
                         <ul class="products-list product-list-in-card pl-2 pr-2">
-                            @foreach (var vehicle in Model.RecentlyApprovedVehicles)
+                            @foreach (var activity in Model.RecentActivities)
                             {
                                 <li class="item">
-                                    <div class="product-img">
-                                        <img src="@vehicle.ImageUrls.FirstOrDefault() ?? " https: //via.placeholder.com/50x30/007bff/ffffff?text =Car"" alt="Product Image" class="img-size-50">
-                                    </div>
                                     <div class="product-info">
                                         <a href="javascript:void(0)" class="product-title">
-                                            @vehicle.Year @vehicle.Make @vehicle.Model
-                                            <span class="badge badge-success float-right">Approved</span>
+                                            @activity.UserEmail
+                                            <span class="badge @GetBadgeClass(activity.Action) float-right">@activity.Action</span>
                                         </a>
                                         <span class="product-description">
-                                            Approved: @vehicle.ApprovalDate?.ToString("d")
+                                            @activity.Date.ToString("g")
                                         </span>
                                     </div>
                                 </li>
@@ -248,4 +239,14 @@
             }
         });
     </script>
+}
+
+@functions {
+    string GetBadgeClass(string action)
+    {
+        if (action.Contains("Approve")) return "badge-success";
+        if (action.Contains("Reject")) return "badge-danger";
+        if (action.Contains("Suspend")) return "badge-warning";
+        return "badge-info";
+    }
 }

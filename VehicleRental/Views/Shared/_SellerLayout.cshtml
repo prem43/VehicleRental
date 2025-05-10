@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - VehicleRental Admin</title>
+    <title>@ViewData["Title"] - VehicleRental Seller</title>
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css" />
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="~/css/admin.css" />
+    <link rel="stylesheet" href="~/css/seller.css" />
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -29,7 +29,7 @@
                     </a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a asp-controller="Admin" asp-action="Index" class="nav-link">Dashboard</a>
+                    <a asp-controller="Seller" asp-action="Index" class="nav-link">Dashboard</a>
                 </li>
             </ul>
 
@@ -37,7 +37,7 @@
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
-                        <i class="fas fa-user-cog"></i> Admin Panel
+                        <i class="fas fa-user-tie"></i> Seller Panel
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                         <a href="#" class="dropdown-item">
@@ -57,9 +57,9 @@
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
-            <a asp-controller="Admin" asp-action="Index" class="brand-link">
+            <a asp-controller="Seller" asp-action="Index" class="brand-link">
                 <img src="~/images/logo.png" alt="VehicleRental Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-                <span class="brand-text font-weight-light">VehicleRental Admin</span>
+                <span class="brand-text font-weight-light">VehicleRental Seller</span>
             </a>
 
             <!-- Sidebar -->
@@ -68,45 +68,22 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <li class="nav-item">
-                            <a asp-controller="Admin" asp-action="Index" class="nav-link active">
+                            <a asp-controller="Seller" asp-action="Index" class="nav-link active">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>Dashboard</p>
                             </a>
                         </li>
-
                         <li class="nav-item">
-                            <a asp-controller="Admin" asp-action="UserManagement" class="nav-link">
-                                <i class="nav-icon fas fa-users"></i>
-                                <p>User Management</p>
-                            </a>
-                        </li>
-                        <!-- In the sidebar menu -->
-                        <li class="nav-item">
-                            <a asp-controller="Admin" asp-action="PendingSellers" class="nav-link">
-                                <i class="nav-icon fas fa-user-clock"></i>
-                                <p>Pending Sellers</p>
-                                <span class="badge badge-info right pending-sellers-count">0</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-controller="Admin" asp-action="PendingVehicles" class="nav-link">
+                            <a asp-controller="Seller" asp-action="Vehicles" class="nav-link">
                                 <i class="nav-icon fas fa-car"></i>
-                                <p>Pending Vehicles</p>
-                                <span class="badge badge-warning right pending-vehicles-count">0</span>
+                                <p>My Vehicles</p>
                             </a>
                         </li>
-                        <!-- Inside the sidebar menu -->
                         <li class="nav-item">
-                            <a asp-controller="Admin" asp-action="RentalRequests" class="nav-link">
-                                <i class="nav-icon fas fa-calendar-check"></i>
+                            <a asp-controller="Seller" asp-action="RentalRequests" class="nav-link">
+                                <i class="nav-icon fas fa-clipboard-list"></i>
                                 <p>Rental Requests</p>
-                                <span class="badge badge-primary right rental-requests-count">0</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-controller="Admin" asp-action="Transactions" class="nav-link">
-                                <i class="nav-icon fas fa-receipt"></i>
-                                <p>Transactions</p>
+                                <span class="badge badge-info right pending-requests-count">0</span>
                             </a>
                         </li>
                     </ul>
@@ -121,7 +98,7 @@
 
         <!-- Footer -->
         <footer class="main-footer">
-            <strong>Copyright &copy; @DateTime.Now.Year VehicleRental Admin.</strong>
+            <strong>Copyright &copy; @DateTime.Now.Year VehicleRental Seller.</strong>
             All rights reserved.
         </footer>
     </div>
@@ -144,21 +121,16 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <!-- Custom Scripts -->
-    <script src="~/js/admin.js"></script>
+    <script src="~/js/seller.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
-    <!-- At the bottom of the file before </body> -->
     <script>
         $(document).ready(function() {
-            // Fetch and update pending counts
-            $.get('/Admin/GetPendingCounts', function(data) {
-                $('.pending-sellers-count').text(data.pendingSellers);
-                $('.pending-vehicles-count').text(data.pendingVehicles);
-                 $('.rental-requests-count').text(data.pendingRentalRequests);
+            // Update pending requests count
+            $.get('/Seller/GetPendingRequestsCount', function(data) {
+                $('.pending-requests-count').text(data.count);
             });
         });
-
-
     </script>
 </body>
 </html>

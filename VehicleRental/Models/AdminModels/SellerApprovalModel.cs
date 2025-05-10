@@ -9,5 +9,15 @@
         public string Status { get; set; }
         public string CompanyName { get; set; }
         public string TaxId { get; set; }
+        public string ProfileImage { get; set; }
+        public string DrivingLicense { get; set; }
+        public string AdditionalInfo { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Address { get; set; }
+        public string Country { get; set; }
+
+        // Add these missing properties
+        public string TaxDocumentPath { get; set; }
+        public string CompanyRegistrationPath { get; set; }
     }
 }

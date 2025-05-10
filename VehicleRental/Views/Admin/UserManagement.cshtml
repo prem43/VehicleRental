@@ -1,103 +1,228 @@
 ﻿@model List<VehicleRental.Models.AdminModels.UserManagementModel>
 @{
-    ViewData["Title"] = "User Management";
+    ViewData["Title"] = "Admin Dashboard";
     Layout = "_AdminLayout";
 }
-
 <div class="container-fluid">
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">User Management</h1>
-    </div>
-
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">All Users</h6>
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">All Users</h3>
         </div>
         <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    <thead>
+            <table id="usersTable" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Registered</th>
+                        <th>Last Login</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
                         <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Registered</th>
-                            <th>Last Login</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var user in Model)
-                        {
-                            <tr>
-                                <td>@user.FullName</td>
-                                <td>@user.Email</td>
-                                <td>@user.Role</td>
-                                <td>@user.RegistrationDate.ToString("d")</td>
-                                <td>@(user.LastLoginDate?.ToString("g") ?? "Never")</td>
-                                <td>
-                                    @if (user.IsActive)
-                                    {
-                                        <span class="badge badge-success">Active</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge badge-danger">Inactive</span>
-                                    }
-                                </td>
-                                <td>
-                                    <div class="btn-group" role="group">
-                                        @if (user.Role == "Seller")
-                                        {
-                                            <button class="btn btn-info btn-sm" onclick="viewSellerDetails('@user.Email')">
-                                                Details
-                                            </button>
-                                        }
-                                        <button class="btn btn-warning btn-sm" onclick="resetPassword('@user.Email')">
-                                            Reset Password
-                                        </button>
+                            <td>@user.UserId</td>
+                            <td>@user.FullName</td>
+                            <td>@user.Email</td>
+                            <td>@user.Role</td>
+                            <td>@user.RegistrationDate.ToString("d")</td>
+                            <td>@(user.LastLoginDate?.ToString("g") ?? "Never")</td>
+                            <td>
+                                <span class="badge @(user.IsActive ? "badge-success" : "badge-danger")">
+                                    @(user.IsActive ? "Active" : "Inactive")
+                                </span>
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#editUserModal"
+                                           data-userid="@user.UserId" data-email="@user.Email" data-role="@user.Role"
+                                           data-status="@user.IsActive">
+                                            <i class="fas fa-edit mr-2"></i>Edit
+                                        </a>
                                         @if (user.IsActive)
                                         {
-                                            <button class="btn btn-danger btn-sm" onclick="toggleUserStatus(@user.UserId, false)">
-                                                Deactivate
-                                            </button>
+                                            <a class="dropdown-item" href="#" onclick="suspendUser(@user.UserId)">
+                                                <i class="fas fa-ban mr-2"></i>Suspend
+                                            </a>
                                         }
                                         else
                                         {
-                                            <button class="btn btn-success btn-sm" onclick="toggleUserStatus(@user.UserId, true)">
-                                                Activate
-                                            </button>
+                                            <a class="dropdown-item" href="#" onclick="activateUser(@user.UserId)">
+                                                <i class="fas fa-check mr-2"></i>Activate
+                                            </a>
                                         }
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item text-danger" href="#" onclick="deleteUser(@user.UserId)">
+                                            <i class="fas fa-trash mr-2"></i>Delete
+                                        </a>
                                     </div>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Edit User Modal -->
+<div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
+            <form id="editUserForm" asp-action="UpdateUser" method="post">
+                <div class="modal-body">
+                    <input type="hidden" id="editUserId" name="UserId" />
+                    <div class="form-group">
+                        <label for="editEmail">Email</label>
+                        <input type="email" class="form-control" id="editEmail" name="Email" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="editRole">Role</label>
+                        <select class="form-control" id="editRole" name="Role">
+                            <option value="Admin">Admin</option>
+                            <option value="Seller">Seller</option>
+                            <option value="User">User</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="editStatus" name="IsActive">
+                            <label class="custom-control-label" for="editStatus">Active</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
 @section Scripts {
     <script>
-        function toggleUserStatus(userId, activate) {
-            if (confirm(activate ? "Activate this user?" : "Deactivate this user?")) {
-                $.post('/Admin/ToggleUserStatus', { userId: userId, activate: activate }, function() {
-                    location.reload();
-                });
+        $(document).ready(function() {
+            $('#usersTable').DataTable({
+                "responsive": true,
+                "autoWidth": false,
+            });
+
+            // Edit modal handler
+            $('#editUserModal').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget);
+                var userId = button.data('userid');
+                var email = button.data('email');
+                var role = button.data('role');
+                var status = button.data('status');
+
+                var modal = $(this);
+                modal.find('#editUserId').val(userId);
+                modal.find('#editEmail').val(email);
+                modal.find('#editRole').val(role);
+                modal.find('#editStatus').prop('checked', status);
+            });
+
+            // Suspend user
+            // $('.suspend-user').click(function(e) {
+            //     debugger;
+            //     e.preventDefault();
+            //     var userId = $(this).data('userid');
+            //     if (confirm('Are you sure you want to suspend this user?')) {
+            //         debugger;
+            //         $.post('/Admin/SuspendUser', { userId: userId }, function() {
+            //             location.reload();
+            //         });
+            //     }
+            // });
+
+            // // Activate user
+            // $('.activate-user').click(function(e) {
+            //     debugger;
+            //     e.preventDefault();
+            //     var userId = $(this).data('userid');
+            //     if (confirm('Are you sure you want to activate this user?')) {
+            //         debugger;
+            //         $.post('/Admin/ActivateUser', { userId: userId }, function() {
+            //             location.reload();
+            //         });
+            //     }
+            // });
+
+            // // Delete user
+            // $('.delete-user').click(function(e) {
+            //     e.preventDefault();
+            //     var userId = $(this).data('userid');
+            //     if (confirm('Are you sure you want to delete this user? This cannot be undone.')) {
+            //         $.post('/Admin/DeleteUser', { userId: userId }, function() {
+            //             location.reload();
+            //         });
+            //     }
+            // });
+        });
+                // Suspend user
+        function suspendUser(userId) {
+            debugger;
+            if (confirm('Are you sure you want to suspend this user?')) {
+                var form = new FormData();
+                form.append('userId', userId);
+                fetch('/Admin/SuspendUser', {
+                    method: 'POST',
+                    body: form,
+                    headers: {
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    }
+                }).then(() => location.reload());
             }
         }
 
-        function resetPassword(email) {
-            alert("Password reset functionality would be implemented here for: " + email);
-            // Typically this would send a password reset link to the user's email
+        // Activate user
+        function activateUser(userId) {
+            debugger;
+            if (confirm('Are you sure you want to activate this user?')) {
+                var form = new FormData();
+                form.append('userId', userId);
+                fetch('/Admin/ActivateUser', {
+                    method: 'POST',
+                    body: form,
+                    headers: {
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    }
+                }).then(() => location.reload());
+            }
         }
 
-        function viewSellerDetails(email) {
-            alert("Seller details would be shown for: " + email);
-            // This would typically open a modal with seller details and statistics
+        // Delete user
+                function deleteUser(userId) {
+            if (confirm('Are you sure?')) {
+                // Simple form submission
+                var form = new FormData();
+                form.append('userId', userId);
+
+                fetch('/Admin/DeleteUser', {
+                    method: 'POST',
+                    body: form,
+                    headers: {
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    }
+                }).then(() => location.reload());
+            }
         }
     </script>
 }

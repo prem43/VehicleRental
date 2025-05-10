@@ -1,0 +1,258 @@
+﻿@model VehicleRental.Models.SellerModels.SellerDashboardModel
+@{
+    ViewData["Title"] = "Seller Dashboard";
+    Layout = "_SellerLayout";
+}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Dashboard</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Dashboard</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3>@Model.TotalListings</h3>
+                        <p>Total Listings</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <a asp-action="Vehicles" class="small-box-footer">
+                        More info <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3>@Model.ActiveListings</h3>
+                        <p>Active Listings</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <a asp-action="Vehicles" class="small-box-footer">
+                        More info <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-warning">
+                    <div class="inner">
+                        <h3>@Model.PendingRentalRequests</h3>
+                        <p>Pending Requests</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <a asp-action="RentalRequests" class="small-box-footer">
+                        More info <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-danger">
+                    <div class="inner">
+                        <h3>@Model.TotalEarnings.ToString("C")</h3>
+                        <p>Total Earnings</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">
+                        View details <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- ./col -->
+        </div>
+        <!-- /.row -->
+        <!-- Main row -->
+        <div class="row">
+            <!-- Left col -->
+            <section class="col-lg-8 connectedSortable">
+                <!-- Recent Requests -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-clipboard-list mr-1"></i>
+                            Recent Rental Requests
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Vehicle</th>
+                                        <th>Customer</th>
+                                        <th>Dates</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var request in Model.RecentRequests)
+                                    {
+                                        <tr>
+                                            <td>@request.VehicleName</td>
+                                            <td>@request.UserName</td>
+                                            <td>@request.StartDate.ToString("MMM d") - @request.EndDate.ToString("MMM d")</td>
+                                            <td>@request.TotalAmount.ToString("C")</td>
+                                            <td>
+                                                <span class="badge @(request.Status == "Pending" ? "badge-warning" :
+                                                                   request.Status == "Approved" ? "badge-success" : "badge-danger")">
+                                                    @request.Status
+                                                </span>
+                                            </td>
+                                            <td>
+                                                @if (request.Status == "Pending")
+                                                {
+                                                    <button class="btn btn-sm btn-success approve-btn" data-id="@request.RequestId">
+                                                        <i class="fas fa-check"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-danger reject-btn" data-id="@request.RequestId">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                }
+                                                <a href="#" class="btn btn-sm btn-info">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right col -->
+            <section class="col-lg-4 connectedSortable">
+                <!-- Quick Actions -->
+                <div class="card bg-gradient-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-bolt mr-1"></i>
+                            Quick Actions
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <a asp-action="AddVehicle" class="btn btn-block btn-outline-light mb-3">
+                                    <i class="fas fa-car mr-2"></i>Add New Vehicle
+                                </a>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-block btn-outline-light mb-3">
+                                    <i class="fas fa-file-invoice-dollar mr-2"></i>Generate Report
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-block btn-outline-light mb-3">
+                                    <i class="fas fa-cog mr-2"></i>Settings
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Approval Status -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            Approval Status
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="progress-group">
+                            Pending Approvals
+                            <span class="float-right"><b>@Model.PendingApproval</b>/@Model.TotalListings</span>
+                            <div class="progress progress-sm">
+                                <div class="progress-bar bg-warning" style="width: @((Model.TotalListings > 0 ? (Model.PendingApproval * 100 / Model.TotalListings) : 0))"></div>
+                            </div>
+                        </div>
+
+                        <div class="progress-group">
+                            Active Rentals
+                            <span class="float-right"><b>@Model.ActiveRentals</b>/@Model.TotalListings</span>
+                            <div class="progress progress-sm">
+                                <div class="progress-bar bg-success" style="width: @((Model.TotalListings > 0 ? (Model.ActiveRentals * 100 / Model.TotalListings) : 0))"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        // Approve/reject buttons
+        $(document).on('click', '.approve-btn', function() {
+            var requestId = $(this).data('id');
+            showApproveModal(requestId);
+        });
+
+        $(document).on('click', '.reject-btn', function() {
+            var requestId = $(this).data('id');
+            showRejectModal(requestId);
+        });
+
+        function showApproveModal(requestId) {
+            // You would implement a modal here to confirm approval
+            if (confirm('Are you sure you want to approve this rental request?')) {
+                $.post('/Seller/ProcessRentalRequest', {
+                    RequestId: requestId,
+                    Action: 'Approve',
+                    Reason: ''
+                }, function() {
+                    location.reload();
+                });
+            }
+        }
+
+        function showRejectModal(requestId) {
+            var reason = prompt('Please enter the reason for rejection:');
+            if (reason !== null) {
+                $.post('/Seller/ProcessRentalRequest', {
+                    RequestId: requestId,
+                    Action: 'Reject',
+                    Reason: reason
+                }, function() {
+                    location.reload();
+                });
+            }
+        }
+    </script>
+}

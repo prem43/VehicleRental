@@ -1,0 +1,171 @@
+﻿@model List<VehicleRental.Models.AdminModels.RentalRequestModel>
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = "_AdminLayout";
+    
+}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Rental Requests</h3>
+        </div>
+        <div class="card-body">
+            <table id="rentalRequestsTable" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Vehicle</th>
+                        <th>Customer</th>
+                        <th>Period</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Requested</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var request in Model)
+                    {
+                        <tr>
+                            <td>@request.RequestId</td>
+                            <td>@request.Make @request.Model (@request.Year)<br><small>Seller: @request.SellerName</small></td>
+                            <td>@request.CustomerName<br><small>@request.CustomerEmail</small></td>
+                            <td>@request.StartDate.ToString("d") to @request.EndDate.ToString("d")<br><small>@((request.EndDate - request.StartDate).Days) days</small></td>
+                            <td>@request.TotalAmount.ToString("C")</td>
+                            <td>
+                                <span class="badge @GetStatusBadgeClass(request.Status)">
+                                    @request.Status
+                                </span>
+                            </td>
+                            <td>@request.RequestDate.ToString("g")</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item view-request-details" href="#" data-requestid="@request.RequestId">
+                                            <i class="fas fa-eye mr-2"></i>View Details
+                                        </a>
+                                        @if (request.Status == "Pending")
+                                        {
+                                            <a class="dropdown-item approve-request" href="#" data-requestid="@request.RequestId">
+                                                <i class="fas fa-check-circle mr-2 text-success"></i>Approve
+                                            </a>
+                                            <a class="dropdown-item reject-request" href="#" data-requestid="@request.RequestId">
+                                                <i class="fas fa-times-circle mr-2 text-danger"></i>Reject
+                                            </a>
+                                        }
+                                        else if (request.Status == "Approved")
+                                        {
+                                            <a class="dropdown-item complete-request" href="#" data-requestid="@request.RequestId">
+                                                <i class="fas fa-flag-checkered mr-2 text-primary"></i>Mark as Completed
+                                            </a>
+                                        }
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Request Details Modal -->
+<div class="modal fade" id="requestDetailsModal" tabindex="-1" role="dialog" aria-labelledby="requestDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="requestDetailsModalLabel">Rental Request Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="requestDetailsContent">
+                <!-- Content will be loaded via AJAX -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#rentalRequestsTable').DataTable({
+                "responsive": true,
+                "autoWidth": false,
+                "order": [[6, "desc"]]
+            });
+
+            // View request details
+            $('.view-request-details').click(function(e) {
+                e.preventDefault();
+                var requestId = $(this).data('requestid');
+
+                $.get('/Admin/GetRentalRequestDetails', { requestId: requestId }, function(data) {
+                    $('#requestDetailsContent').html(data);
+                    $('#requestDetailsModal').modal('show');
+                });
+            });
+
+            // Approval actions
+            $('.approve-request').click(function(e) {
+                e.preventDefault();
+                var requestId = $(this).data('requestid');
+                if (confirm('Are you sure you want to approve this rental request?')) {
+                    $.post('/Admin/ProcessRentalRequest', {
+                        requestId: requestId,
+                        action: 'Approve'
+                    }, function() {
+                        location.reload();
+                    });
+                }
+            });
+
+            $('.reject-request').click(function(e) {
+                e.preventDefault();
+                var requestId = $(this).data('requestid');
+                if (confirm('Are you sure you want to reject this rental request?')) {
+                    $.post('/Admin/ProcessRentalRequest', {
+                        requestId: requestId,
+                        action: 'Reject'
+                    }, function() {
+                        location.reload();
+                    });
+                }
+            });
+
+            $('.complete-request').click(function(e) {
+                e.preventDefault();
+                var requestId = $(this).data('requestid');
+                if (confirm('Are you sure you want to mark this rental as completed?')) {
+                    $.post('/Admin/ProcessRentalRequest', {
+                        requestId: requestId,
+                        action: 'Complete'
+                    }, function() {
+                        location.reload();
+                    });
+                }
+            });
+        });
+    </script>
+}
+
+@functions {
+    string GetStatusBadgeClass(string status)
+    {
+        switch (status)
+        {
+            case "Pending": return "badge-warning";
+            case "Approved": return "badge-success";
+            case "Rejected": return "badge-danger";
+            case "Completed": return "badge-info";
+            default: return "badge-secondary";
+        }
+    }
+}

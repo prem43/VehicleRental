@@ -1,0 +1,161 @@
+﻿@model VehicleRental.Models.SellerModels.AddVehicleModel
+@{
+    ViewData["Title"] = "Add New Vehicle";
+    Layout = "_SellerLayout";
+}
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Add New Vehicle</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item"><a asp-action="Vehicles">My Vehicles</a></li>
+                    <li class="breadcrumb-item active">Add New Vehicle</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Vehicle Information</h3>
+                    </div>
+
+                    <form asp-action="AddVehicle" method="post" enctype="multipart/form-data">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Make">Make</label>
+                                        <input type="text" asp-for="Make" class="form-control" placeholder="Enter make (e.g., Toyota)">
+                                        <span asp-validation-for="Make" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Model">Model</label>
+                                        <input asp-for="Model" type="text" class="form-control" placeholder="Enter model (e.g., Camry)">
+                                        <span asp-validation-for="Model" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Year">Year</label>
+                                        <input  type="datetime"asp-for="Year" class="form-control" placeholder="Enter year">
+                                        <span asp-validation-for="Year" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="DailyRate">Daily Rate ($)</label>
+                                        <input type="text" asp-for="DailyRate" class="form-control" placeholder="Enter daily rate">
+                                        <span asp-validation-for="DailyRate" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="MinimumRentalDays">Minimum Rental Days</label>
+                                        <input asp-for="MinimumRentalDays" class="form-control" value="1" min="1">
+                                        <span asp-validation-for="MinimumRentalDays" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="Description">Description</label>
+                                <textarea asp-for="Description" class="form-control" rows="3" placeholder="Enter vehicle description"></textarea>
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Vehicle Images (At least 3 images)</label>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="vehicleImages" name="Images" multiple accept="image/*">
+                                    <label class="custom-file-label" for="vehicleImages">Choose images...</label>
+                                </div>
+                                <small class="form-text text-muted">Upload clear photos from different angles.</small>
+                                <div id="imagePreview" class="mt-2 row"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Vehicle Documents (Registration, Insurance, etc.)</label>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="vehicleDocuments" name="Documents" multiple accept=".pdf,.doc,.docx">
+                                    <label class="custom-file-label" for="vehicleDocuments">Choose documents...</label>
+                                </div>
+                                <small class="form-text text-muted">Upload required documents in PDF or Word format.</small>
+                                <ul id="documentList" class="mt-2"></ul>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">Submit for Approval</button>
+                            <a asp-action="Vehicles" class="btn btn-default float-right">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@* @section Scripts {
+    <script>
+        $(function () {
+            // Preview images before upload
+            $('#vehicleImages').on('change', function() {
+                $('#imagePreview').empty();
+                var files = $(this)[0].files;
+
+                if (files.length > 10) {
+                    alert('You can upload a maximum of 10 images');
+                    $(this).val('');
+                    return;
+                }
+
+                for (var i = 0; i < files.length; i++) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#imagePreview').append(
+                            '<div class="col-3 mb-2">' +
+                            '<img src="' + e.target.result + '" class="img-thumbnail" style="height: 100px; width: 100%; object-fit: cover;">' +
+                            '</div>'
+                        );
+                    }
+                    reader.readAsDataURL(files[i]);
+                }
+            });
+
+            // Show document names
+            $('#vehicleDocuments').on('change', function() {
+                $('#documentList').empty();
+                var files = $(this)[0].files;
+
+                if (files.length > 5) {
+                    alert('You can upload a maximum of 5 documents');
+                    $(this).val('');
+                    return;
+                }
+
+                for (var i = 0; i < files.length; i++) {
+                    $('#documentList').append('<li>' + files[i].name + '</li>');
+                }
+            });
+
+            // BS custom file input
+            bsCustomFileInput.init();
+        });
+    </script>
+} *@

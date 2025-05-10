@@ -1,122 +1,206 @@
 ﻿@model List<VehicleRental.Models.AdminModels.SellerApprovalModel>
 @{
-    ViewData["Title"] = "Pending Seller Approvals";
+    ViewData["Title"] = "Admin Dashboard";
     Layout = "_AdminLayout";
 }
 
 <div class="container-fluid">
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Pending Seller Approvals</h1>
-    </div>
-
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Seller Requests</h6>
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Pending Seller Approvals</h3>
         </div>
         <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    <thead>
+            <table id="sellersTable" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Company</th>
+                        <th>Tax ID</th>
+                        <th>Registered</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var seller in Model)
+                    {
                         <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Company</th>
-                            <th>Tax ID</th>
-                            <th>Registered</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var seller in Model)
-                        {
-                            <tr>
-                                <td>@seller.FullName</td>
-                                <td>@seller.Email</td>
-                                <td>@seller.CompanyName</td>
-                                <td>@seller.TaxId</td>
-                                <td>@seller.RegistrationDate.ToString("d")</td>
-                                <td>
-                                    <div class="btn-group" role="group">
-                                        <button class="btn btn-success btn-sm" onclick="processApproval(@seller.UserId, 'Seller', 'Approve')">
-                                            Approve
-                                        </button>
-                                        <button class="btn btn-warning btn-sm" onclick="processApproval(@seller.UserId, 'Seller', 'UnderObservation')">
-                                            Review
-                                        </button>
-                                        <button class="btn btn-danger btn-sm" onclick="processApproval(@seller.UserId, 'Seller', 'Reject')">
-                                            Reject
-                                        </button>
+                            <td>@seller.UserId</td>
+                            <td>@seller.FullName</td>
+                            <td>@seller.Email</td>
+                            <td>@seller.CompanyName</td>
+                            <td>@seller.TaxId</td>
+                            <td>@seller.RegistrationDate.ToString("d")</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item view-seller-details" href="#" data-userid="@seller.UserId">
+                                            <i class="fas fa-eye mr-2"></i>View Details
+                                        </a>
+                                        <a class="dropdown-item approve-seller" href="#" data-userid="@seller.UserId">
+                                            <i class="fas fa-check-circle mr-2 text-success"></i>Approve
+                                        </a>
+                                        <a class="dropdown-item reject-seller" href="#" data-userid="@seller.UserId">
+                                            <i class="fas fa-times-circle mr-2 text-danger"></i>Reject
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item request-more-info" href="#" data-userid="@seller.UserId">
+                                            <i class="fas fa-info-circle mr-2 text-info"></i>Request More Info
+                                        </a>
                                     </div>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Seller Details Modal -->
+<div class="modal fade" id="sellerDetailsModal" tabindex="-1" role="dialog" aria-labelledby="sellerDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="sellerDetailsModalLabel">Seller Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="sellerDetailsContent">
+                <!-- Content will be loaded via AJAX -->
+                <div class="text-center">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="approvalModal" tabindex="-1" role="dialog" aria-labelledby="approvalModalLabel" aria-hidden="true">
+<!-- Approval Notes Modal -->
+<div class="modal fade" id="approvalNotesModal" tabindex="-1" role="dialog" aria-labelledby="approvalNotesModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="approvalModalLabel">Add Notes</h5>
+                <h5 class="modal-title" id="approvalNotesModalLabel">Add Notes</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <form id="approvalForm">
-                    <input type="hidden" id="targetId" name="targetId">
-                    <input type="hidden" id="targetType" name="targetType">
-                    <input type="hidden" id="action" name="action">
+            <form id="approvalNotesForm">
+                <input type="hidden" id="actionType" name="Action" />
+                <input type="hidden" id="targetUserId" name="TargetId" />
+                <input type="hidden" name="TargetType" value="Seller" />
+                <div class="modal-body">
                     <div class="form-group">
-                        <label for="notes">Notes (Optional)</label>
-                        <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>
+                        <label for="approvalNotes">Notes (Optional)</label>
+                        <textarea class="form-control" id="approvalNotes" name="Notes" rows="3"></textarea>
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" onclick="submitApproval()">Submit</button>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
 @section Scripts {
     <script>
-        function processApproval(targetId, targetType, action) {
-            $('#targetId').val(targetId);
-            $('#targetType').val(targetType);
-            $('#action').val(action);
-            $('#approvalModal').modal('show');
-        }
+        $(document).ready(function() {
+            // Initialize DataTable
+            $('#sellersTable').DataTable({
+                "responsive": true,
+                "autoWidth": false,
+            });
 
-        function submitApproval() {
+            // View seller details
+            $(document).on('click', '.view-seller-details', function(e) {
+                e.preventDefault();
+                var userId = $(this).data('userid');
+
+                // Show loading spinner
+                $('#sellerDetailsContent').html(`
+                    <div class="text-center">
+                        <div class="spinner-border" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                `);
+
+                $('#sellerDetailsModal').modal('show');
+
+                $.get('/Admin/GetSellerDetails', { userId: userId })
+                    .done(function(data) {
+                        $('#sellerDetailsContent').html(data);
+                    })
+                    .fail(function() {
+                        $('#sellerDetailsContent').html(`
+                            <div class="alert alert-danger">
+                                Failed to load seller details. Please try again.
+                            </div>
+                        `);
+                    });
+            });
+
+            // Approval actions
+            $('.approve-seller, .reject-seller, .request-more-info').click(function(e) {
+                e.preventDefault();
+                var userId = $(this).data('userid');
+                var action = $(this).hasClass('approve-seller') ? 'Approve' :
+                             $(this).hasClass('reject-seller') ? 'Reject' : 'UnderObservation';
+
+                $('#targetUserId').val(userId);
+                $('#actionType').val(action);
+                $('#approvalNotesModalLabel').text(action + ' Seller');
+                $('#approvalNotesModal').modal('show');
+            });
+
+                    // Submit approval form - direct AJAX call
+                $('#approvalNotesForm').submit(function(e) {
+            e.preventDefault();
+
+            // Get form data
             var formData = {
-                TargetId: $('#targetId').val(),
-                TargetType: $('#targetType').val(),
-                Action: $('#action').val(),
-                Notes: $('#notes').val()
+                Action: $('#actionType').val(),
+                TargetId: $('#targetUserId').val(),
+                TargetType: "Seller",
+                Notes: $('#approvalNotes').val()
             };
 
+            // Make AJAX call
             $.ajax({
                 url: '/Admin/ProcessApproval',
                 type: 'POST',
-                data: formData,
+                contentType: 'application/json', // Important for JSON data
+                dataType: 'json', // Expect JSON response
+                data: JSON.stringify(formData), // Stringify the object
                 headers: {
                     'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
                 },
-                success: function (response) {
-                    $('#approvalModal').modal('hide');
+                success: function(response) {
+                    $('#approvalNotesModal').modal('hide');
                     location.reload();
                 },
-                error: function (error) {
-                    alert('Error processing approval');
+                error: function(xhr, status, error) {
+                    console.error("Status:", status);
+                    console.error("Error:", error);
+                    console.error("Response:", xhr.responseText);
+                    alert('Error: ' + (xhr.responseText || 'Request failed'));
                 }
             });
-        }
+        });
+        });
     </script>
 }

@@ -10,7 +10,11 @@
         public string SellerEmail { get; set; }
         public string Status { get; set; }
         public DateTime SubmissionDate { get; set; }
-        public List<string> DocumentUrls { get; set; }
-        public List<string> ImageUrls { get; set; }
+        public decimal PricePerDay { get; set; }
+        public bool IsAvailable { get; set; }
+        public string Description { get; set; }
+        public string InsuranceDetails { get; set; }
+        public List<string> DocumentUrls { get; set; } = new List<string>();
+        public List<string> ImageUrls { get; set; } = new List<string>();
     }
 }
