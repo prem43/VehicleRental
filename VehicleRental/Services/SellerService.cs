@@ -58,13 +58,20 @@ namespace VehicleRental.Services
                              r.UserId, u.Full_name AS UserName, u.Email AS UserEmail,
                              r.StartDate, r.EndDate, 
                              DATEDIFF(day, r.StartDate, r.EndDate) AS RentalDays,
-                             r.TotalAmount, r.Status, r.RequestDate
+                             r.TotalAmount, r.Status, r.PaymentStatus, r.Notes, r.CustomerImageUrl, r.IdProofNumber, r.RequestDate
                       FROM RentalRequests r
                       JOIN Vehicles v ON r.VehicleId = v.VehicleId
                       JOIN UserMaster u ON r.UserId = u.U_Id
                       WHERE r.SellerId = @sellerId
                       ORDER BY r.RequestDate DESC",
                     new { sellerId })).ToList();
+
+                foreach (var request in dashboard.RecentRequests)
+                {
+                    request.DocumentUrls = (await connection.QueryAsync<string>(
+                        "SELECT DocumentUrl FROM RentalRequestDocuments WHERE RequestId = @RequestId",
+                        new { request.RequestId })).ToList();
+                }
 
                 return dashboard;
             }
@@ -176,7 +183,7 @@ namespace VehicleRental.Services
                              r.UserId, u.Full_name AS UserName, u.Email AS UserEmail,
                              r.StartDate, r.EndDate, 
                              DATEDIFF(day, r.StartDate, r.EndDate) AS RentalDays,
-                             r.TotalAmount, r.Status, r.RequestDate
+                             r.TotalAmount, r.Status, r.PaymentStatus, r.Notes, r.CustomerImageUrl, r.IdProofNumber, r.RequestDate
                       FROM RentalRequests r
                       JOIN Vehicles v ON r.VehicleId = v.VehicleId
                       JOIN UserMaster u ON r.UserId = u.U_Id
@@ -184,7 +191,15 @@ namespace VehicleRental.Services
                       ORDER BY r.Status, r.RequestDate DESC",
                     new { sellerId });
 
-                return requests.ToList();
+                var requestList = requests.ToList();
+                foreach (var request in requestList)
+                {
+                    request.DocumentUrls = (await connection.QueryAsync<string>(
+                        "SELECT DocumentUrl FROM RentalRequestDocuments WHERE RequestId = @RequestId",
+                        new { request.RequestId })).ToList();
+                }
+
+                return requestList;
             }
         }
 
@@ -205,14 +220,20 @@ namespace VehicleRental.Services
                                                RejectionReason = CASE WHEN @status = 'Rejected' THEN @reason ELSE NULL END
                                            WHERE RequestId = @requestId AND SellerId = @sellerId";
 
-                        await connection.ExecuteAsync(updateQuery,
+                        var affectedRows = await connection.ExecuteAsync(updateQuery,
                             new
                             {
                                 status,
-                                reason = model.Reason,
+                                reason = model.Reason ?? "",
                                 requestId = model.RequestId,
                                 sellerId
                             }, transaction);
+
+                        if (affectedRows == 0)
+                        {
+                            transaction.Rollback();
+                            return false;
+                        }
 
                         // If approved, mark vehicle as unavailable during rental period
                         if (model.Action == "Approve")

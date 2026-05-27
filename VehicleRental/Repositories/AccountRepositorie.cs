@@ -53,7 +53,7 @@ namespace VehicleRental.Repositories
                     parameters.Add("@Birthdate", user.Birthdate);
                     parameters.Add("@Contact_No", user.Contact_No);
                     parameters.Add("@Email", user.Email);
-                    parameters.Add("@RoleName", "User");
+                    parameters.Add("@RoleName", user.Status == "Pending" ? "Seller" : "User");
                     parameters.Add("@ReturnValue", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
 
                     // Execute procedure

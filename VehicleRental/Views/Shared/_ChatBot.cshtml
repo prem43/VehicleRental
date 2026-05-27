@@ -1,0 +1,31 @@
+<div class="vr-chatbot" id="vrChatbot">
+    <button class="vr-chatbot-toggle" type="button" aria-label="Open help chat">
+        <i class="fas fa-comments"></i>
+    </button>
+    <div class="vr-chatbot-panel" aria-live="polite">
+        <div class="vr-chatbot-header">
+            <div>
+                <strong>CityRide Help</strong>
+                <span>Online assistant</span>
+            </div>
+            <button type="button" class="vr-chatbot-close" aria-label="Close chat">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="vr-chatbot-messages">
+            <div class="vr-message bot">Hello, how can I help you today?</div>
+            <div class="vr-message bot">Choose a concern below or type a short question.</div>
+        </div>
+        <div class="vr-chatbot-options">
+            <button type="button" data-topic="booking">Booking help</button>
+            <button type="button" data-topic="payment">Payment concern</button>
+            <button type="button" data-topic="seller">Seller approval</button>
+            <button type="button" data-topic="documents">Vehicle documents</button>
+            <button type="button" data-topic="support">Contact support</button>
+        </div>
+        <form class="vr-chatbot-input">
+            <input type="text" placeholder="Type your concern..." aria-label="Type your concern" />
+            <button type="submit"><i class="fas fa-paper-plane"></i></button>
+        </form>
+    </div>
+</div>

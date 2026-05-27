@@ -1,0 +1,55 @@
+@model VehicleRental.Models.UserModels.VehicleCardModel
+@{
+    ViewData["Title"] = $"{Model.Make} {Model.Model}";
+}
+
+<section class="vehicle-page">
+    <div class="container py-5">
+        <div class="vehicle-detail-grid">
+            <div class="vehicle-detail-gallery">
+                @if (Model.ImageUrls.Any())
+                {
+                    <img src="@Model.ImageUrls.First()" alt="@Model.Make @Model.Model" />
+                    @if (Model.ImageUrls.Count > 1)
+                    {
+                        <div class="vehicle-thumb-grid">
+                            @foreach (var image in Model.ImageUrls.Skip(1))
+                            {
+                                <img src="@image" alt="@Model.Make @Model.Model image" />
+                            }
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="vehicle-placeholder large"><i class="fas fa-car-side"></i></div>
+                }
+            </div>
+            <div class="vehicle-detail-panel">
+                <span class="availability-pill @(Model.IsAvailable ? "available" : "unavailable")">
+                    @(Model.IsAvailable ? "Available" : "Booked")
+                </span>
+                <h1>@Model.Year @Model.Make @Model.Model</h1>
+                <p class="seller-line">Listed by @Model.SellerName</p>
+                <p>@Model.Description</p>
+                <div class="detail-metrics">
+                    <div>
+                        <strong>@Model.DailyRate.ToString("C")</strong>
+                        <span>Daily rate</span>
+                    </div>
+                    <div>
+                        <strong>@Model.MinimumRentalDays</strong>
+                        <span>Minimum days</span>
+                    </div>
+                </div>
+                <div class="rental-actions mt-4">
+                    <a asp-action="Index" class="btn btn-outline-light">Back</a>
+                    @if (Model.IsAvailable)
+                    {
+                        <a asp-action="RequestRental" asp-route-id="@Model.VehicleId" class="btn btn-primary">Request Rental</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

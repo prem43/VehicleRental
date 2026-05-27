@@ -1,0 +1,69 @@
+@model List<VehicleRental.Models.UserModels.MyRentalModel>
+@{
+    ViewData["Title"] = "My Rentals";
+}
+
+<section class="vehicle-page">
+    <div class="container py-5">
+        <div class="vehicle-page-header">
+            <div>
+                <p class="text-uppercase text-info mb-2">My account</p>
+                <h1>My Rentals</h1>
+            </div>
+            <a asp-action="Index" class="btn btn-primary">Browse Vehicles</a>
+        </div>
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-warning">@TempData["ErrorMessage"]</div>
+        }
+
+        <div class="rental-table">
+            <table class="table table-dark table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Vehicle</th>
+                        <th>Seller</th>
+                        <th>Dates</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Payment</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var rental in Model)
+                    {
+                        <tr>
+                            <td>@rental.VehicleName</td>
+                            <td>@rental.SellerName</td>
+                            <td>@rental.StartDate.ToString("MMM d, yyyy") - @rental.EndDate.ToString("MMM d, yyyy")</td>
+                            <td>@rental.TotalAmount.ToString("C")</td>
+                            <td><span class="badge bg-@(rental.Status == "Approved" ? "success" : rental.Status == "Pending" ? "warning" : "secondary")">@rental.Status</span></td>
+                            <td>@rental.PaymentStatus</td>
+                            <td class="text-end">
+                                @if (rental.Status == "Approved" && rental.PaymentStatus != "Paid")
+                                {
+                                    <a asp-action="Payment" asp-route-requestId="@rental.RequestId" class="btn btn-sm btn-primary">Pay Now</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @if (!Model.Any())
+        {
+            <div class="empty-state">
+                <i class="fas fa-calendar-check"></i>
+                <h2>No rental requests yet</h2>
+                <p>Choose a vehicle and send your first rental request.</p>
+            </div>
+        }
+    </div>
+</section>

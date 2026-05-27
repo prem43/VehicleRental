@@ -32,10 +32,10 @@ namespace VehicleRental.Services
                 {
                     Full_name = $"{model.FirstName} {model.LastName}",
                     Email = model.Email,
-                    Address = "", // Set default or get from model
+                    Address = model.Role == "Seller" ? model.CompanyName ?? "Not specified" : "Not specified",
                     Birthdate = DateTime.Now.AddYears(-18), // Default 18 years ago
-                    Contact_No = "", // Set default or get from model
-                    RoleId = 3 // Default to Customer role (make sure this matches your DB)
+                    Contact_No = model.Role == "Seller" ? model.TaxId ?? "0000000000" : "0000000000",
+                    Status = model.Role == "Seller" ? "Pending" : "Approved"
                 };
 
                 var result = await _accountRepository.RegisterUserAsync(user, model.Password);

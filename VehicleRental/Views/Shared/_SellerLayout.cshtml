@@ -1,9 +1,12 @@
 ﻿<!DOCTYPE html>
+@{
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+}
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - VehicleRental Seller</title>
+    <title>@ViewData["Title"] - CityRide Seller</title>
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -58,8 +61,8 @@
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a asp-controller="Seller" asp-action="Index" class="brand-link">
-                <img src="~/images/logo.png" alt="VehicleRental Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-                <span class="brand-text font-weight-light">VehicleRental Seller</span>
+                <img src="~/images/logo.png" alt="CityRide Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+                <span class="brand-text font-weight-light">CityRide Seller</span>
             </a>
 
             <!-- Sidebar -->
@@ -68,19 +71,19 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <li class="nav-item">
-                            <a asp-controller="Seller" asp-action="Index" class="nav-link active">
+                            <a asp-controller="Seller" asp-action="Index" class="nav-link @(currentAction == "Index" ? "active" : "")">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>Dashboard</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a asp-controller="Seller" asp-action="Vehicles" class="nav-link">
+                            <a asp-controller="Seller" asp-action="Vehicles" class="nav-link @(currentAction == "Vehicles" || currentAction == "AddVehicle" ? "active" : "")">
                                 <i class="nav-icon fas fa-car"></i>
                                 <p>My Vehicles</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a asp-controller="Seller" asp-action="RentalRequests" class="nav-link">
+                            <a asp-controller="Seller" asp-action="RentalRequests" class="nav-link @(currentAction == "RentalRequests" ? "active" : "")">
                                 <i class="nav-icon fas fa-clipboard-list"></i>
                                 <p>Rental Requests</p>
                                 <span class="badge badge-info right pending-requests-count">0</span>
@@ -98,7 +101,7 @@
 
         <!-- Footer -->
         <footer class="main-footer">
-            <strong>Copyright &copy; @DateTime.Now.Year VehicleRental Seller.</strong>
+            <strong>Copyright &copy; @DateTime.Now.Year CityRide Seller.</strong>
             All rights reserved.
         </footer>
     </div>

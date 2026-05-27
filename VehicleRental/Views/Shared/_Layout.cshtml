@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - VehicleRental</title>
+    <title>@ViewData["Title"] - CityRide</title>
     <!-- Premium CSS Libraries -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -22,14 +22,14 @@
         <div class="container">
             <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">
                 <i class="fas fa-car me-2"></i>
-                <span class="gradient-text">VehicleRental</span>
+                <span class="gradient-text">CityRide</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarOffcanvas">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="offcanvas offcanvas-end bg-dark" tabindex="-1" id="navbarOffcanvas">
                 <div class="offcanvas-header">
-                    <h5 class="offcanvas-title gradient-text">VehicleRental</h5>
+                    <h5 class="offcanvas-title gradient-text">CityRide</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
                 </div>
                 <div class="offcanvas-body">
@@ -52,13 +52,16 @@
                                     <a class="nav-link" asp-controller="Seller" asp-action="Index">Seller Dashboard</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Vehicles" asp-action="MyVehicles">My Vehicles</a>
+                                    <a class="nav-link" asp-controller="Seller" asp-action="Vehicles">My Vehicles</a>
                                 </li>
                             }
                             else
                             {
                                 <li class="nav-item">
                                     <a class="nav-link" asp-controller="Vehicles" asp-action="Index">Rent a Vehicle</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Vehicles" asp-action="MyRentals">My Rentals</a>
                                 </li>
                             }
                         }
@@ -121,13 +124,15 @@
         @RenderBody()
     </main>
 
+    <partial name="_ChatBot" />
+
     <!-- 3D Animated Footer -->
     <footer class="footer bg-dark pt-5">
         <div class="container">
             <div class="row g-4">
                 <div class="col-lg-4">
-                    <h3 class="gradient-text mb-4">VehicleRental</h3>
-                    <p>Premium vehicle rental service with the latest models and exceptional customer experience.</p>
+                    <h3 class="gradient-text mb-4">CityRide</h3>
+                    <p>Simple city ride rental service with verified vehicles and clear booking flow.</p>
                     <div class="social-icons mt-4">
                         <a href="#" class="icon-circle me-2"><i class="fab fa-facebook-f"></i></a>
                         <a href="#" class="icon-circle me-2"><i class="fab fa-twitter"></i></a>
@@ -150,7 +155,7 @@
                     <ul class="list-unstyled text-muted">
                         <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> Patna ,Bihar </li>
                         <li class="mb-2"><i class="fas fa-phone me-2"></i>+91 9123188119</li>
-                        <li><i class="fas fa-envelope me-2"></i> info@vehiclerental.com</li>
+                        <li><i class="fas fa-envelope me-2"></i> info@cityride.com</li>
                     </ul>
                 </div>
                 <div class="col-lg-3 col-md-4">
@@ -165,7 +170,7 @@
             <hr class="my-4 bg-secondary">
             <div class="row">
                 <div class="col-md-6 text-center text-md-start">
-                    <p class="text-muted mb-0">&copy; @DateTime.Now.Year VehicleRental. All rights reserved.</p>
+                    <p class="text-muted mb-0">&copy; @DateTime.Now.Year CityRide. All rights reserved.</p>
                 </div>
                 <div class="col-md-6 text-center text-md-end">
                     <a href="#" class="text-muted me-3">Privacy Policy</a>

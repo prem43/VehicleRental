@@ -37,32 +37,39 @@ namespace VehicleRental.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddVehicle([FromForm] AddVehicleModel model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddVehicle([FromForm] AddVehicleModel vehicleModel)
         {
-            model.DailyRate = 2000;
-            model.Description = "jfgjdf kjfddghi dffi u";
-            model.Make = "Toyota";
-            model.Model = "Fortuner";
-            //if (!ModelState.IsValid)
-            //{
-            //    return View(model);
-            //}
+            if (vehicleModel.Images == null || vehicleModel.Images.Count < 3)
+            {
+                ModelState.AddModelError(nameof(vehicleModel.Images), "Upload at least 3 vehicle images.");
+            }
 
-            //try
-            //{
-                var result = await _sellerService.AddVehicle(model, _sellerId);
+            if (vehicleModel.Documents == null || vehicleModel.Documents.Count == 0)
+            {
+                ModelState.AddModelError(nameof(vehicleModel.Documents), "Upload at least one vehicle document.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(vehicleModel);
+            }
+
+            try
+            {
+                var result = await _sellerService.AddVehicle(vehicleModel, _sellerId);
                 if (result)
                 {
-                    TempData["SuccessMessage"] = "Vehicle added successfully!";
+                    TempData["SuccessMessage"] = "Vehicle added successfully and submitted for admin approval.";
                     return RedirectToAction("Vehicles");
                 }
-            //}
-            //catch (Exception ex)
-            //{
-            //    ModelState.AddModelError("", "Error: " + ex.Message);
-            //}
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Error: " + ex.Message);
+            }
 
-            return View(model);
+            return View(vehicleModel);
         }
         //public async Task<IActionResult> AddVehicle(AddVehicleModel model)
         //{
@@ -101,13 +108,26 @@ namespace VehicleRental.Controllers
             return View(requests);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetPendingRequestsCount()
+        {
+            var requests = await _sellerService.GetRentalRequests(_sellerId);
+            return Json(new { count = requests.Count(x => x.Status == "Pending") });
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ProcessRentalRequest(ProcessRentalModel model)
         {
+            if (model.Action == "Approve")
+            {
+                ModelState.Remove(nameof(model.Reason));
+            }
+
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                TempData["ErrorMessage"] = "Unable to process rental request. Please try again.";
+                return RedirectToAction("RentalRequests");
             }
 
             var result = await _sellerService.ProcessRentalRequest(model, _sellerId);

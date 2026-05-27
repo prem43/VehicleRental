@@ -13,6 +13,7 @@
         public DateTime CreatedDate { get; set; }
         public DateTime? LastLoginDate { get; set; }
         public bool IsActive { get; set; }
+        public string? Status { get; set; }
 
         public virtual UserRole Role { get; set; }
     }

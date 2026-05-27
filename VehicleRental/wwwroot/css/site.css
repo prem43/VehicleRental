@@ -14,6 +14,544 @@ body {
     overflow-x: hidden;
 }
 
+.vr-home-hero {
+    min-height: 92vh;
+    padding: 128px 0 72px;
+    display: flex;
+    align-items: center;
+    background:
+        linear-gradient(90deg, rgba(10, 12, 15, .94), rgba(10, 12, 15, .68)),
+        url('/css/Image/Mercedes.jpeg') center/cover no-repeat;
+}
+
+.vr-home-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(360px, .82fr);
+    gap: 56px;
+    align-items: center;
+}
+
+.vr-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    margin-bottom: 1rem;
+    color: #8bd9d1;
+    font-size: .82rem;
+    font-weight: 800;
+    letter-spacing: 0;
+    text-transform: uppercase;
+}
+
+.vr-home-copy h1 {
+    max-width: 780px;
+    font-size: clamp(2.4rem, 4.5vw, 4.8rem);
+    line-height: 1.02;
+    font-weight: 800;
+    letter-spacing: 0;
+    margin-bottom: 1.25rem;
+}
+
+.vr-home-copy p {
+    max-width: 660px;
+    color: rgba(255, 255, 255, .76);
+    font-size: 1.1rem;
+    line-height: 1.75;
+}
+
+.vr-home-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .9rem;
+    margin: 2rem 0;
+}
+
+.vr-home-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: .75rem;
+    max-width: 720px;
+}
+
+.vr-home-stats div,
+.vr-role-card,
+.vr-process-step,
+.vr-home-cta {
+    border: 1px solid rgba(255, 255, 255, .12);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, .06);
+    backdrop-filter: blur(10px);
+}
+
+.vr-home-stats div {
+    padding: 1rem;
+}
+
+.vr-home-stats strong,
+.vr-home-stats span {
+    display: block;
+}
+
+.vr-home-stats strong {
+    font-size: 1.1rem;
+}
+
+.vr-home-stats span {
+    color: rgba(255, 255, 255, .62);
+    font-size: .9rem;
+}
+
+.vr-home-visual {
+    position: relative;
+    min-height: 500px;
+}
+
+.vr-home-visual img {
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, .42);
+}
+
+.vr-status-card {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+    width: 230px;
+    padding: 1rem;
+    border-radius: 8px;
+    color: #11161b;
+    background: #f8fbff;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, .28);
+}
+
+.vr-status-card i {
+    color: #198754;
+    font-size: 1.35rem;
+}
+
+.vr-status-card strong,
+.vr-status-card span {
+    display: block;
+}
+
+.vr-status-card span {
+    color: #607080;
+    font-size: .86rem;
+}
+
+.vr-status-card.card-left {
+    left: -28px;
+    top: 48px;
+}
+
+.vr-status-card.card-right {
+    right: -22px;
+    bottom: 56px;
+}
+
+.vr-home-section {
+    padding: 88px 0;
+    background: #101214;
+}
+
+.vr-fleet-section {
+    background: #15191f;
+}
+
+.vr-section-title {
+    max-width: 720px;
+    margin-bottom: 2rem;
+}
+
+.vr-section-title h2,
+.vr-home-cta h2 {
+    font-size: clamp(2rem, 3vw, 3.1rem);
+    font-weight: 800;
+    letter-spacing: 0;
+}
+
+.vr-section-title p,
+.vr-home-cta p {
+    color: rgba(255, 255, 255, .68);
+    font-size: 1.05rem;
+}
+
+.vr-role-grid,
+.vr-process-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.vr-role-card,
+.vr-process-step {
+    padding: 1.35rem;
+}
+
+.vr-role-icon {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    background: rgba(136, 211, 206, .14);
+    color: #8bd9d1;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.vr-role-card h3,
+.vr-process-step h3 {
+    font-size: 1.2rem;
+    font-weight: 750;
+}
+
+.vr-role-card p,
+.vr-process-step p {
+    color: rgba(255, 255, 255, .66);
+    margin-bottom: 0;
+}
+
+.vr-process-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.vr-process-step span {
+    display: inline-block;
+    margin-bottom: 1rem;
+    color: #8bd9d1;
+    font-weight: 800;
+}
+
+.vr-fleet-preview {
+    display: grid;
+    grid-template-columns: 1.1fr .9fr 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.vr-fleet-preview img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.vr-home-cta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 2rem;
+}
+
+@media (max-width: 992px) {
+    .vr-home-grid,
+    .vr-role-grid,
+    .vr-process-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .vr-home-visual {
+        min-height: auto;
+    }
+
+    .vr-status-card {
+        position: static;
+        width: auto;
+        margin-top: .75rem;
+    }
+
+    .vr-fleet-preview {
+        grid-template-columns: 1fr;
+    }
+
+    .vr-home-cta {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 640px) {
+    .vr-home-hero {
+        padding-top: 108px;
+    }
+
+    .vr-home-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .vr-home-visual img,
+    .vr-fleet-preview img {
+        height: 260px;
+    }
+}
+
+.landing-hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 112px 0 64px;
+    background:
+        linear-gradient(90deg, rgba(13, 17, 23, .96), rgba(13, 17, 23, .74)),
+        url('/css/Image/Audi.jpeg') center/cover no-repeat;
+}
+
+.landing-hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(360px, .95fr);
+    gap: 3rem;
+    align-items: center;
+}
+
+.landing-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    color: #7dd3fc;
+    font-size: .82rem;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-bottom: .8rem;
+}
+
+.landing-copy h1 {
+    max-width: 760px;
+    font-size: clamp(2.5rem, 5vw, 4.8rem);
+    line-height: 1.02;
+    font-weight: 800;
+    margin-bottom: 1.25rem;
+}
+
+.landing-copy p,
+.section-heading p,
+.contact-band p {
+    color: rgba(255, 255, 255, .72);
+    font-size: 1.05rem;
+}
+
+.landing-copy p {
+    max-width: 660px;
+    font-size: 1.2rem;
+}
+
+.landing-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .9rem;
+    margin: 2rem 0;
+}
+
+.landing-trust {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: .75rem;
+    max-width: 640px;
+}
+
+.landing-trust div {
+    padding: 1rem;
+    border: 1px solid rgba(255, 255, 255, .12);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, .07);
+}
+
+.landing-trust strong,
+.landing-trust span {
+    display: block;
+}
+
+.landing-trust strong {
+    font-size: 1.45rem;
+    color: white;
+}
+
+.landing-trust span {
+    color: rgba(255, 255, 255, .68);
+    font-size: .9rem;
+}
+
+.landing-showcase {
+    position: relative;
+    min-height: 540px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, .4);
+    border: 1px solid rgba(255, 255, 255, .14);
+}
+
+.landing-showcase img {
+    width: 100%;
+    height: 100%;
+    min-height: 540px;
+    object-fit: cover;
+}
+
+.showcase-card {
+    position: absolute;
+    width: min(280px, calc(100% - 32px));
+    padding: 1rem;
+    border-radius: 8px;
+    background: rgba(12, 17, 24, .88);
+    border: 1px solid rgba(255, 255, 255, .14);
+    backdrop-filter: blur(10px);
+}
+
+.showcase-card.top {
+    top: 24px;
+    left: 24px;
+}
+
+.showcase-card.bottom {
+    right: 24px;
+    bottom: 24px;
+}
+
+.showcase-card span,
+.showcase-card small {
+    display: block;
+    color: rgba(255, 255, 255, .68);
+}
+
+.showcase-card strong {
+    display: block;
+    margin: .25rem 0;
+    color: white;
+}
+
+.landing-section {
+    padding: 88px 0;
+    background: #101214;
+}
+
+.landing-section:nth-of-type(even) {
+    background: #15191f;
+}
+
+.section-heading {
+    max-width: 760px;
+    margin: 0 auto 2.25rem;
+    text-align: center;
+}
+
+.section-heading h2,
+.contact-band h2 {
+    font-size: clamp(2rem, 3.5vw, 3.4rem);
+    font-weight: 800;
+    margin-bottom: .75rem;
+}
+
+.role-flow-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.role-flow-card,
+.fleet-card,
+.contact-band {
+    border: 1px solid rgba(255, 255, 255, .1);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, .06);
+}
+
+.role-flow-card {
+    padding: 1.5rem;
+}
+
+.role-flow-card i {
+    width: 48px;
+    height: 48px;
+    display: inline-grid;
+    place-items: center;
+    border-radius: 8px;
+    background: rgba(125, 211, 252, .12);
+    color: #7dd3fc;
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.role-flow-card h3,
+.fleet-card h3 {
+    font-size: 1.25rem;
+    font-weight: 750;
+}
+
+.role-flow-card p,
+.fleet-card p {
+    color: rgba(255, 255, 255, .68);
+    margin-bottom: 0;
+}
+
+.fleet-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.fleet-card {
+    overflow: hidden;
+}
+
+.fleet-card img {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+}
+
+.fleet-card div {
+    padding: 1.25rem;
+}
+
+.contact-band {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 2rem;
+    background:
+        linear-gradient(90deg, rgba(26, 35, 48, .96), rgba(26, 35, 48, .82)),
+        url('/css/Image/Mercedes.jpeg') center/cover no-repeat;
+}
+
+@media (max-width: 992px) {
+    .landing-hero-grid,
+    .role-flow-grid,
+    .fleet-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .landing-showcase {
+        min-height: 420px;
+    }
+
+    .landing-showcase img {
+        min-height: 420px;
+    }
+}
+
+@media (max-width: 768px) {
+    .landing-hero {
+        padding-top: 96px;
+    }
+
+    .landing-trust {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-band {
+        display: block;
+    }
+
+    .contact-band .btn {
+        margin-top: 1rem;
+    }
+}
+
 /* Gradient Text */
 .gradient-text {
     background: var(--gradient);
@@ -510,5 +1048,366 @@ body {
     .nav-tabs .nav-link {
         padding: 0.75rem;
         font-size: 0.9rem;
+    }
+}
+
+.vehicle-page {
+    min-height: 100vh;
+    padding-top: 86px;
+    background: #101214;
+}
+
+.vehicle-page-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: end;
+    margin-bottom: 1.5rem;
+}
+
+.vehicle-page-header h1,
+.vehicle-detail-panel h1,
+.checkout-panel h1 {
+    font-size: 2.25rem;
+    font-weight: 700;
+}
+
+.vehicle-search {
+    display: flex;
+    gap: .5rem;
+    min-width: min(420px, 100%);
+}
+
+.rental-card,
+.vehicle-detail-panel,
+.checkout-panel,
+.rental-table {
+    background: rgba(255, 255, 255, .06);
+    border: 1px solid rgba(255, 255, 255, .1);
+    border-radius: 8px;
+}
+
+.rental-card {
+    overflow: hidden;
+    height: 100%;
+}
+
+.rental-card-media {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    background: #171a1f;
+}
+
+.rental-card-media img,
+.vehicle-detail-gallery img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.vehicle-placeholder {
+    height: 100%;
+    display: grid;
+    place-items: center;
+    color: rgba(255, 255, 255, .5);
+    font-size: 4rem;
+}
+
+.vehicle-placeholder.large {
+    min-height: 420px;
+}
+
+.availability-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: .35rem .65rem;
+    border-radius: 999px;
+    font-size: .85rem;
+    font-weight: 700;
+}
+
+.rental-card-media .availability-pill {
+    position: absolute;
+    top: .75rem;
+    left: .75rem;
+}
+
+.availability-pill.available {
+    color: #092b16;
+    background: #8ee6a3;
+}
+
+.availability-pill.unavailable {
+    color: #34180a;
+    background: #f4b27b;
+}
+
+.rental-card-body {
+    padding: 1.25rem;
+}
+
+.rental-card-body h2 {
+    font-size: 1.25rem;
+    margin-bottom: .25rem;
+}
+
+.rental-card-body p,
+.seller-line {
+    color: rgba(255, 255, 255, .7);
+}
+
+.rental-price {
+    margin: 1rem 0;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--secondary-color);
+}
+
+.rental-price span {
+    font-size: .9rem;
+    color: rgba(255, 255, 255, .65);
+}
+
+.rental-actions {
+    display: flex;
+    gap: .75rem;
+    flex-wrap: wrap;
+}
+
+.vehicle-detail-grid,
+.checkout-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(320px, .9fr);
+    gap: 1.5rem;
+}
+
+.vehicle-detail-gallery {
+    overflow: hidden;
+    border-radius: 8px;
+    min-height: 420px;
+    background: #171a1f;
+}
+
+.vehicle-thumb-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: .5rem;
+    padding: .5rem;
+    background: #171a1f;
+}
+
+.vehicle-thumb-grid img {
+    width: 100%;
+    height: 92px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.vehicle-detail-panel,
+.checkout-panel {
+    padding: 1.5rem;
+}
+
+.detail-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .75rem;
+    margin-top: 1.25rem;
+}
+
+.detail-metrics div,
+.checkout-total {
+    border: 1px solid rgba(255, 255, 255, .1);
+    border-radius: 8px;
+    padding: 1rem;
+    background: rgba(0, 0, 0, .18);
+}
+
+.detail-metrics strong,
+.detail-metrics span {
+    display: block;
+}
+
+.detail-metrics span {
+    color: rgba(255, 255, 255, .65);
+}
+
+.checkout-form {
+    background: rgba(0, 0, 0, .16);
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.payment-page {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 430px);
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.payment-card {
+    border: 1px solid rgba(255, 255, 255, .1);
+    border-radius: 8px;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, .06);
+}
+
+.payment-card h2 {
+    font-size: 1.45rem;
+}
+
+.checkout-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1rem 0;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 4rem 1rem;
+    color: rgba(255, 255, 255, .7);
+}
+
+.empty-state i {
+    font-size: 3rem;
+    color: var(--secondary-color);
+    margin-bottom: 1rem;
+}
+
+.rental-table {
+    overflow-x: auto;
+    padding: .75rem;
+}
+
+.vr-chatbot {
+    position: fixed;
+    right: 24px;
+    bottom: 86px;
+    z-index: 1100;
+}
+
+.vr-chatbot-toggle {
+    width: 56px;
+    height: 56px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--gradient);
+    color: white;
+    font-size: 1.25rem;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, .35);
+}
+
+.vr-chatbot-panel {
+    display: none;
+    width: min(360px, calc(100vw - 32px));
+    overflow: hidden;
+    border-radius: 8px;
+    background: #15191f;
+    border: 1px solid rgba(255, 255, 255, .12);
+    box-shadow: 0 18px 45px rgba(0, 0, 0, .4);
+}
+
+.vr-chatbot.open .vr-chatbot-panel {
+    display: block;
+}
+
+.vr-chatbot.open .vr-chatbot-toggle {
+    display: none;
+}
+
+.vr-chatbot-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, .06);
+}
+
+.vr-chatbot-header span {
+    display: block;
+    font-size: .8rem;
+    color: rgba(255, 255, 255, .65);
+}
+
+.vr-chatbot-close,
+.vr-chatbot-input button {
+    border: 0;
+    color: white;
+    background: transparent;
+}
+
+.vr-chatbot-messages {
+    height: 240px;
+    padding: 1rem;
+    overflow-y: auto;
+}
+
+.vr-message {
+    width: fit-content;
+    max-width: 85%;
+    padding: .65rem .8rem;
+    border-radius: 8px;
+    margin-bottom: .65rem;
+    font-size: .92rem;
+}
+
+.vr-message.bot {
+    background: rgba(255, 255, 255, .08);
+}
+
+.vr-message.user {
+    margin-left: auto;
+    background: #4f8cff;
+}
+
+.vr-chatbot-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    padding: 0 1rem 1rem;
+}
+
+.vr-chatbot-options button {
+    border: 1px solid rgba(255, 255, 255, .12);
+    border-radius: 999px;
+    padding: .4rem .65rem;
+    color: white;
+    background: rgba(255, 255, 255, .06);
+}
+
+.vr-chatbot-input {
+    display: flex;
+    border-top: 1px solid rgba(255, 255, 255, .1);
+}
+
+.vr-chatbot-input input {
+    flex: 1;
+    border: 0;
+    background: transparent;
+    color: white;
+    padding: .85rem 1rem;
+    outline: none;
+}
+
+.vr-chatbot-input button {
+    width: 48px;
+}
+
+@media (max-width: 768px) {
+    .vehicle-page-header,
+    .vehicle-detail-grid,
+    .checkout-panel,
+    .payment-page {
+        display: block;
+    }
+
+    .vehicle-search {
+        margin-top: 1rem;
+    }
+
+    .vehicle-detail-panel,
+    .checkout-form {
+        margin-top: 1rem;
     }
 }

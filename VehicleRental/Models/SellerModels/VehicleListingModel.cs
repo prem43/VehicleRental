@@ -30,6 +30,11 @@ namespace VehicleRental.Models.SellerModels
         public int RentalDays { get; set; }
         public decimal TotalAmount { get; set; }
         public string Status { get; set; }
+        public string PaymentStatus { get; set; }
+        public string Notes { get; set; }
+        public string CustomerImageUrl { get; set; }
+        public string IdProofNumber { get; set; }
+        public List<string> DocumentUrls { get; set; } = new List<string>();
         public DateTime RequestDate { get; set; }
         public DateTime? ApprovalDate { get; set; }
         public string RejectionReason { get; set; } // Only applicable if rejected
@@ -39,8 +44,8 @@ namespace VehicleRental.Models.SellerModels
     public class ProcessRentalModel
     {
         public int RequestId { get; set; }
-        public string Action { get; set; } // Approve or Reject
-        public string Reason { get; set; }
+        public string Action { get; set; } = ""; // Approve or Reject
+        public string? Reason { get; set; }
     }
 
     public class SellerDashboardModel

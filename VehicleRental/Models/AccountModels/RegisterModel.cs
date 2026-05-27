@@ -30,10 +30,10 @@ namespace VehicleRental.Models.AccountModels
 
         [Required]
         [Display(Name = "Role")]
-        public string Role { get; set; } // "Admin", "User", or "Seller"
+        public string Role { get; set; } = "User"; // "Admin", "User", or "Seller"
 
         // Seller specific properties
-        public string CompanyName { get; set; }
-        public string TaxId { get; set; }
+        public string? CompanyName { get; set; }
+        public string? TaxId { get; set; }
     }
 }

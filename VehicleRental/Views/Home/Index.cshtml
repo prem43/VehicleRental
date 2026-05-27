@@ -1,371 +1,128 @@
-﻿@{
-    ViewData["Title"] = "Premium Vehicle Rentals | VehicleRental";
+@{
+    ViewData["Title"] = "CityRide";
 }
 
-<!-- 3D Parallax Hero Section -->
-<section id="home" class="hero-section vh-100 position-relative overflow-hidden">
-    <div class="hero-3d-effect"></div>
-    <div class="particles-js" id="particles-js"></div>
-    <div class="container h-100">
-        <div class="row h-100 align-items-center">
-            <div class="col-lg-7 text-white">
-                <h1 class="display-3 fw-bold mb-4 animate__animated animate__fadeInDown" data-aos="fade-down" data-aos-delay="100">
-                    <span class="gradient-text">Drive Your Dream</span> Car Today
-                </h1>
-                <p class="lead mb-5 fs-4 animate__animated animate__fadeIn" data-aos="fade-up" data-aos-delay="200">
-                    Experience luxury, performance, and freedom with our premium fleet of vehicles.
-                    <span class="d-block mt-2">Unmatched quality at competitive prices.</span>
+<section id="home" class="vr-home-hero">
+    <div class="container">
+        <div class="vr-home-grid">
+            <div class="vr-home-copy">
+                <span class="vr-kicker">Vehicle rental system</span>
+                <h1>Rent cars, manage listings, and approve bookings in one clean platform.</h1>
+                <p>
+                    A practical rental workflow for users, sellers, and admins. Browse approved vehicles,
+                    send rental requests, approve listings, and complete dummy payments without extra setup.
                 </p>
-                <div class="d-flex gap-3 animate__animated animate__fadeInUp" data-aos="fade-up" data-aos-delay="300">
-                    <a href="#vehicles" class="btn btn-primary btn-lg px-4 me-2 btn-glow">
-                        <i class="fas fa-car me-2"></i> Browse Fleet
+                <div class="vr-home-actions">
+                    <a asp-controller="Vehicles" asp-action="Index" class="btn btn-primary btn-lg">
+                        <i class="fas fa-car-side me-2"></i>Browse Vehicles
                     </a>
-                    <a asp-controller="Account" asp-action="Register" class="btn btn-outline-light btn-lg px-4 btn-glow">
-                        <i class="fas fa-rocket me-2"></i> Get Started
+                    <a asp-controller="Account" asp-action="Login" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-right-to-bracket me-2"></i>Sign In
                     </a>
                 </div>
+                <div class="vr-home-stats">
+                    <div><strong>Admin</strong><span>Approvals and control</span></div>
+                    <div><strong>Seller</strong><span>Listings and requests</span></div>
+                    <div><strong>User</strong><span>Rentals and payment</span></div>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="hero-scroll-down animate__animated animate__fadeIn animate__infinite animate__slower">
-        <a href="#vehicles" class="scroll-down-link">
-            <i class="fas fa-chevron-down"></i>
-        </a>
-    </div>
-</section>
 
-<!-- Floating Car Models (3D Perspective) -->
-<div class="floating-cars">
-    <div class="car-model car-1" data-depth="0.2">
-        <img src="~/css/image/Audi.jpeg" alt="Audi" class="img-fluid">
-    </div>
-    <div class="car-model car-2" data-depth="0.3">
-        <img src="~/css/image/BMW.jpeg" alt="BMW" class="img-fluid">
-    </div>
-    <div class="car-model car-3" data-depth="0.1">
-        <img src="~/css/image/Mercedes.jpeg" alt="Mercedes" class="img-fluid">
-    </div>
-</div>
-
-<!-- Vehicle Showcase Section -->
-<section id="vehicles" class="py-6 bg-dark-gradient">
-    <div class="container py-5">
-        <div class="row mb-5">
-            <div class="col-lg-8 mx-auto text-center">
-                <h2 class="display-4 fw-bold mb-3" data-aos="fade-up">
-                    <span class="gradient-text">Our Premium Fleet</span>
-                </h2>
-                <p class="lead text-muted" data-aos="fade-up" data-aos-delay="100">
-                    Select from our exclusive collection of luxury and performance vehicles
-                </p>
-            </div>
-        </div>
-
-        <!-- 3D Carousel Gallery -->
-        <div class="glide vehicle-gallery" data-aos="zoom-in">
-            <div class="glide__track" data-glide-el="track">
-                <ul class="glide__slides">
-                    <li class="glide__slide">
-                        <div class="vehicle-card-3d">
-                            <div class="vehicle-card-inner">
-                                <div class="vehicle-card-front">
-                                    <img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" class="img-fluid" alt="Luxury Sedan">
-                                    <div class="vehicle-overlay">
-                                        <h5>Luxury Sedan</h5>
-                                        <p class="price">10700/day</p>
-                                    </div>
-                                </div>
-                                <div class="vehicle-card-back">
-                                    <h5>Luxury Sedan</h5>
-                                    <ul class="features-list">
-                                        <li><i class="fas fa-tachometer-alt"></i> 0-60mph in 4.2s</li>
-                                        <li><i class="fas fa-cogs"></i> Automatic Transmission</li>
-                                        <li><i class="fas fa-users"></i> 5 Seats</li>
-                                        <li><i class="fas fa-snowflake"></i> Climate Control</li>
-                                    </ul>
-                                    <a href="#" class="btn btn-outline-light mt-3">Book Now</a>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <!-- Add 5 more slides with different vehicles -->
-                </ul>
-            </div>
-            <div class="glide__arrows" data-glide-el="controls">
-                <button class="glide__arrow glide__arrow--left" data-glide-dir="<">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-                <button class="glide__arrow glide__arrow--right" data-glide-dir=">">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
-            </div>
-        </div>
-
-        <div class="text-center mt-5" data-aos="fade-up">
-            <a asp-controller="Home" asp-action="Vehicles" class="btn btn-primary btn-lg px-5 py-3 btn-glow">
-                View Complete Fleet <i class="fas fa-arrow-right ms-2"></i>
-            </a>
-        </div>
-    </div>
-</section>
-
-<!-- Interactive Features Section -->
-<section id="features" class="py-6 bg-black">
-    <div class="container py-5">
-        <div class="row mb-5">
-            <div class="col-lg-8 mx-auto text-center">
-                <h2 class="display-4 fw-bold mb-3" data-aos="fade-up">
-                    <span class="gradient-text">Why Choose Us</span>
-                </h2>
-                <p class="lead text-muted" data-aos="fade-up" data-aos-delay="100">
-                    Experience the difference with our premium services
-                </p>
-            </div>
-        </div>
-
-        <div class="row g-4 feature-cards">
-            <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="100">
-                <div class="feature-card h-100">
-                    <div class="feature-icon">
-                        <i class="fas fa-bolt"></i>
+            <div class="vr-home-visual">
+                <img src="~/css/Image/BMW.jpeg" alt="BMW rental vehicle" />
+                <div class="vr-status-card card-left">
+                    <i class="fas fa-check-circle"></i>
+                    <div>
+                        <strong>Approved listing</strong>
+                        <span>Visible to users</span>
                     </div>
-                    <h4 class="mt-4 mb-3">Instant Booking</h4>
-                    <p class="text-muted">Reserve your vehicle in seconds with our streamlined booking process.</p>
-                    <div class="feature-hover-content">
-                        <a href="#" class="btn btn-sm btn-outline-light mt-3">Learn More</a>
+                </div>
+                <div class="vr-status-card card-right">
+                    <i class="fas fa-credit-card"></i>
+                    <div>
+                        <strong>Dummy payment</strong>
+                        <span>Transaction tracked</span>
                     </div>
                 </div>
             </div>
-            <!-- Add 3 more feature cards -->
         </div>
     </div>
 </section>
 
-<!-- Testimonials with Parallax -->
-<section id="testimonials" class="py-6 testimonial-section">
-    <div class="parallax-bg"></div>
-    <div class="container py-5 position-relative">
-        <div class="row mb-5">
-            <div class="col-lg-8 mx-auto text-center">
-                <h2 class="display-4 fw-bold mb-3 text-white" data-aos="fade-up">
-                    <span class="gradient-text">Client Experiences</span>
-                </h2>
-                <p class="lead text-light" data-aos="fade-up" data-aos-delay="100">
-                    Hear from our satisfied customers
-                </p>
-            </div>
+<section id="features" class="vr-home-section">
+    <div class="container">
+        <div class="vr-section-title">
+            <span class="vr-kicker">Role based access</span>
+            <h2>Simple screens for every role.</h2>
+            <p>Each account type sees only the actions needed for its workflow.</p>
         </div>
 
-        <div class="glide testimonial-slider" data-aos="zoom-in">
-            <div class="glide__track" data-glide-el="track">
-                <ul class="glide__slides">
-                    <li class="glide__slide">
-                        <div class="testimonial-card">
-                            <div class="testimonial-rating">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <p class="testimonial-text">"The best rental experience I've ever had! The car was pristine and the service was exceptional."</p>
-                            <div class="testimonial-author">
-                                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Michael Johnson" class="rounded-circle">
-                                <div class="author-info">
-                                    <h6 class="mb-0">Michael Johnson</h6>
-                                    <small class="text-muted">Business Executive</small>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <!-- Add 2 more testimonials -->
-                </ul>
-            </div>
-            <div class="glide__bullets" data-glide-el="controls[nav]">
-                <button class="glide__bullet" data-glide-dir="=0"></button>
-                <button class="glide__bullet" data-glide-dir="=1"></button>
-                <button class="glide__bullet" data-glide-dir="=2"></button>
-            </div>
+        <div class="vr-role-grid">
+            <article class="vr-role-card">
+                <div class="vr-role-icon"><i class="fas fa-user-shield"></i></div>
+                <h3>Admin</h3>
+                <p>Approves sellers and vehicles, manages users, checks rental requests, and views transactions.</p>
+            </article>
+            <article class="vr-role-card">
+                <div class="vr-role-icon"><i class="fas fa-store"></i></div>
+                <h3>Seller</h3>
+                <p>Adds vehicles, uploads images/documents, handles rental requests, and manages availability.</p>
+            </article>
+            <article class="vr-role-card">
+                <div class="vr-role-icon"><i class="fas fa-user"></i></div>
+                <h3>User</h3>
+                <p>Browses approved vehicles, creates rental requests, tracks status, and completes dummy payment.</p>
+            </article>
         </div>
     </div>
 </section>
 
-<!-- Interactive Stats Counter -->
-<section class="py-5 bg-primary stats-section">
-    <div class="container py-4">
-        <div class="row g-4">
-            <div class="col-md-3 col-6 text-center" data-aos="fade-up" data-aos-delay="100">
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-car"></i>
-                    </div>
-                    <h3 class="stat-counter" data-count="250">0</h3>
-                    <p class="stat-label">Vehicles</p>
-                </div>
+<section id="vehicles" class="vr-home-section vr-fleet-section">
+    <div class="container">
+        <div class="vr-section-title">
+            <span class="vr-kicker">Rental workflow</span>
+            <h2>From listing to payment, the data stays connected.</h2>
+        </div>
+
+        <div class="vr-process-grid">
+            <div class="vr-process-step">
+                <span>01</span>
+                <h3>Seller lists vehicle</h3>
+                <p>Vehicle goes to pending approval with images and documents.</p>
             </div>
-            <!-- Add 3 more stats -->
+            <div class="vr-process-step">
+                <span>02</span>
+                <h3>Admin approves</h3>
+                <p>Approved vehicles appear on the public rental page.</p>
+            </div>
+            <div class="vr-process-step">
+                <span>03</span>
+                <h3>User requests rental</h3>
+                <p>Seller reviews the request and approves or rejects it.</p>
+            </div>
+            <div class="vr-process-step">
+                <span>04</span>
+                <h3>User pays dummy amount</h3>
+                <p>Payment status and transaction record are saved for dashboard tracking.</p>
+            </div>
+        </div>
+
+        <div class="vr-fleet-preview">
+            <img src="~/css/Image/Audi.jpeg" alt="Audi rental vehicle" />
+            <img src="~/css/Image/Mercedes.jpeg" alt="Mercedes rental vehicle" />
+            <img src="~/css/Image/BMW.jpeg" alt="BMW rental vehicle" />
         </div>
     </div>
 </section>
 
-<!-- Contact Section with 3D Map -->
-<section id="contact" class="py-6 bg-dark">
-    <div class="container py-5">
-        <div class="row g-4">
-            <div class="col-lg-6" data-aos="fade-right">
-                <h2 class="display-5 fw-bold mb-4">
-                    <span class="gradient-text">Get In Touch</span>
-                </h2>
-                <p class="lead text-muted mb-5">Have questions? Our team is ready to help you 24/7.</p>
-
-                <div class="contact-info">
-                    <div class="contact-item mb-4">
-                        <div class="contact-icon">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <div class="contact-details">
-                            <h5 class="mb-1">Our Location</h5>
-                            <p class="mb-0 text-muted">Patna , Bihar</p>
-                        </div>
-                    </div>
-                    <!-- Add 2 more contact items -->
-                </div>
+<section id="contact" class="vr-home-section">
+    <div class="container">
+        <div class="vr-home-cta">
+            <div>
+                <span class="vr-kicker">Need quick help?</span>
+                <h2>Use the chat assistant for common concerns.</h2>
+                <p>Booking, payment, seller approval, and document help are available from the floating chat widget.</p>
             </div>
-            <div class="col-lg-6" data-aos="fade-left">
-                <div class="contact-form-container">
-                    <h4 class="mb-4">Send us a message</h4>
-                    <form class="contact-form">
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control bg-black border-dark" id="name" placeholder="Prem Ranjan">
-                            <label for="name">Prem Ranjan</label>
-                        </div>
-                        <!-- Add more form fields -->
-                        <button type="submit" class="btn btn-primary btn-glow w-100 py-3 mt-3">
-                            Send Message <i class="fas fa-paper-plane ms-2"></i>
-                        </button>
-                    </form>
-                </div>
-            </div>
+            <a asp-controller="Account" asp-action="Register" class="btn btn-primary btn-lg">Create Account</a>
         </div>
     </div>
 </section>
-
-<!-- Floating Call-to-Action -->
-<div class="floating-cta">
-    <div class="cta-content">
-        <h5 class="mb-2">Ready to drive?</h5>
-        <a href="#" class="btn btn-primary btn-sm btn-glow">Book Now</a>
-    </div>
-    <div class="cta-icon">
-        <i class="fas fa-car"></i>
-    </div>
-</div>
-
-@section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-    <script>
-        // Initialize AOS animations
-        AOS.init({
-            duration: 800,
-            easing: 'ease-in-out',
-            once: true
-        });
-
-        // Initialize carousel
-        new Glide('.vehicle-gallery', {
-            type: 'carousel',
-            perView: 3,
-            gap: 30,
-            breakpoints: {
-                992: { perView: 2 },
-                768: { perView: 1 }
-            }
-        }).mount();
-
-        // Initialize testimonial slider
-        new Glide('.testimonial-slider', {
-            type: 'slider',
-            perView: 1,
-            autoplay: 3000
-        }).mount();
-
-        // Particles.js configuration
-        particlesJS('particles-js', {
-            particles: {
-                number: { value: 80, density: { enable: true, value_area: 800 } },
-                color: { value: "#ffffff" },
-                shape: { type: "circle" },
-                opacity: { value: 0.5, random: true },
-                size: { value: 3, random: true },
-                line_linked: { enable: true, distance: 150, color: "#ffffff", opacity: 0.4, width: 1 },
-                move: { enable: true, speed: 2, direction: "none", random: true, straight: false, out_mode: "out" }
-            },
-            interactivity: {
-                detect_on: "canvas",
-                events: {
-                    onhover: { enable: true, mode: "repulse" },
-                    onclick: { enable: true, mode: "push" }
-                }
-            }
-        });
-
-        // GSAP animations
-        gsap.registerPlugin(ScrollTrigger);
-
-        // Animate floating cars
-        gsap.to(".car-1", {
-            y: 30,
-            duration: 3,
-            repeat: -1,
-            yoyo: true,
-            ease: "sine.inOut"
-        });
-
-        // Add animations for other cars with different timing
-
-        // Stats counter animation
-        const counters = document.querySelectorAll('.stat-counter');
-        const speed = 200;
-
-        counters.forEach(counter => {
-            const animate = () => {
-                const target = +counter.getAttribute('data-count');
-                const count = +counter.innerText;
-                const increment = target / speed;
-
-                if (count < target) {
-                    counter.innerText = Math.ceil(count + increment);
-                    setTimeout(animate, 1);
-                } else {
-                    counter.innerText = target;
-                }
-            };
-
-            ScrollTrigger.create({
-                trigger: counter,
-                start: "top 80%",
-                onEnter: animate
-            });
-        });
-
-        // Back to top button
-        const backToTop = document.querySelector('.back-to-top');
-        window.addEventListener('scroll', () => {
-            if (window.pageYOffset > 300) {
-                backToTop.classList.add('show');
-            } else {
-                backToTop.classList.remove('show');
-            }
-        });
-
-        // 3D card flip on hover
-        document.querySelectorAll('.vehicle-card-3d').forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                card.querySelector('.vehicle-card-inner').style.transform = 'rotateY(180deg)';
-            });
-            card.addEventListener('mouseleave', () => {
-                card.querySelector('.vehicle-card-inner').style.transform = 'rotateY(0deg)';
-            });
-        });
-    </script>
-}

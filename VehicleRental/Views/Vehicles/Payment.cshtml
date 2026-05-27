@@ -1,0 +1,44 @@
+@model VehicleRental.Models.UserModels.PaymentViewModel
+@{
+    ViewData["Title"] = "Dummy Payment";
+}
+
+<section class="vehicle-page">
+    <div class="container py-5">
+        <div class="payment-page">
+            <div>
+                <p class="text-uppercase text-info mb-2">Dummy payment</p>
+                <h1>Complete Booking Payment</h1>
+                <p class="text-muted">This is a demo payment page. No real card or gateway is used.</p>
+            </div>
+
+            <div class="payment-card">
+                <h2>@Model.VehicleName</h2>
+                <p>Seller: @Model.SellerName</p>
+                <p>@Model.StartDate.ToString("MMM d, yyyy") - @Model.EndDate.ToString("MMM d, yyyy")</p>
+                <div class="checkout-total">
+                    <span>Total amount</span>
+                    <strong>@Model.TotalAmount.ToString("C")</strong>
+                </div>
+
+                @if (Model.PaymentStatus == "Paid")
+                {
+                    <div class="alert alert-success mb-0">Payment already completed.</div>
+                }
+                else
+                {
+                    <form asp-action="Pay" method="post">
+                        <input type="hidden" name="requestId" value="@Model.RequestId" />
+                        <label class="form-label">Payment Method</label>
+                        <select name="paymentMethod" class="form-control mb-3">
+                            <option value="Dummy Card">Dummy Card</option>
+                            <option value="Dummy UPI">Dummy UPI</option>
+                            <option value="Dummy Cash">Dummy Cash</option>
+                        </select>
+                        <button class="btn btn-primary w-100" type="submit">Pay Dummy Amount</button>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</section>

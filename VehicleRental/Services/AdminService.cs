@@ -477,7 +477,9 @@ namespace VehicleRental.Services
                 {
                     try
                     {
-                        string status = action;
+                        string status = action == "Approve" ? "Approved" :
+                                        action == "Reject" ? "Rejected" :
+                                        action == "Complete" ? "Completed" : action;
                         string updateQuery = "UPDATE RentalRequests SET Status = @Status WHERE RequestId = @RequestId";
 
                         if (action == "Complete")
@@ -496,28 +498,6 @@ namespace VehicleRental.Services
                         }
 
                         await connection.ExecuteAsync(updateQuery, new { Status = status, RequestId = requestId }, transaction);
-
-                        if (action == "Approve")
-                        {
-                            var rentalRequest = await connection.QueryFirstOrDefaultAsync(
-                                @"SELECT CustomerId, VehicleId, StartDate, EndDate, TotalAmount 
-                                  FROM RentalRequests WHERE RequestId = @RequestId",
-                                new { RequestId = requestId }, transaction);
-
-                            await connection.ExecuteAsync(
-                                @"INSERT INTO RentalTransactions 
-                                  (RequestId, CustomerId, VehicleId, StartDate, EndDate, Amount, TransactionDate, Status)
-                                  VALUES (@RequestId, @CustomerId, @VehicleId, @StartDate, @EndDate, @Amount, GETDATE(), 'Completed')",
-                                new
-                                {
-                                    RequestId = requestId,
-                                    rentalRequest.CustomerId,
-                                    rentalRequest.VehicleId,
-                                    rentalRequest.StartDate,
-                                    rentalRequest.EndDate,
-                                    Amount = rentalRequest.TotalAmount
-                                }, transaction);
-                        }
 
                         await connection.ExecuteAsync(
                             @"INSERT INTO AdminActions (AdminId, ActionType, TargetId, TargetType, ActionDate, Notes)

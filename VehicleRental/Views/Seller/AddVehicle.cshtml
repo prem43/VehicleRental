@@ -54,14 +54,14 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label asp-for="Year">Year</label>
-                                        <input  type="datetime"asp-for="Year" class="form-control" placeholder="Enter year">
+                                        <input type="number" asp-for="Year" class="form-control" placeholder="Enter year">
                                         <span asp-validation-for="Year" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label asp-for="DailyRate">Daily Rate ($)</label>
-                                        <input type="text" asp-for="DailyRate" class="form-control" placeholder="Enter daily rate">
+                                        <input type="number" step="0.01" min="1" asp-for="DailyRate" class="form-control" placeholder="Enter daily rate">
                                         <span asp-validation-for="DailyRate" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -87,6 +87,7 @@
                                     <label class="custom-file-label" for="vehicleImages">Choose images...</label>
                                 </div>
                                 <small class="form-text text-muted">Upload clear photos from different angles.</small>
+                                <span asp-validation-for="Images" class="text-danger"></span>
                                 <div id="imagePreview" class="mt-2 row"></div>
                             </div>
 
@@ -97,6 +98,7 @@
                                     <label class="custom-file-label" for="vehicleDocuments">Choose documents...</label>
                                 </div>
                                 <small class="form-text text-muted">Upload required documents in PDF or Word format.</small>
+                                <span asp-validation-for="Documents" class="text-danger"></span>
                                 <ul id="documentList" class="mt-2"></ul>
                             </div>
                         </div>
@@ -111,7 +113,10 @@
     </div>
 </section>
 
-@* @section Scripts {
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
     <script>
         $(function () {
             // Preview images before upload
@@ -155,7 +160,9 @@
             });
 
             // BS custom file input
-            bsCustomFileInput.init();
+            if (window.bsCustomFileInput) {
+                bsCustomFileInput.init();
+            }
         });
     </script>
-} *@
+}

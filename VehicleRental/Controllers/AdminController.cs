@@ -101,8 +101,7 @@ namespace VehicleRental.Controllers
                 return BadRequest(ModelState);
             }
 
-            //var adminId = int.Parse(User.FindFirstValue("UserId"));
-            var adminId = model.TargetId;
+            var adminId = int.Parse(User.FindFirstValue("UserId"));
             var result = await _adminService.ProcessApproval(model, adminId);
 
             if (result)

@@ -36,6 +36,18 @@ namespace VehicleRental.Controllers
                 {
                     var role = await _accountService.GetUserRoleAsync(user.Email);
 
+                    if (!user.IsActive)
+                    {
+                        ModelState.AddModelError(string.Empty, "Your account is inactive. Please contact support.");
+                        return View(model);
+                    }
+
+                    if (role == "Seller" && user.Status != "Approved")
+                    {
+                        ModelState.AddModelError(string.Empty, "Your seller account is waiting for admin approval.");
+                        return View(model);
+                    }
+
                     var claims = new List<Claim>
                     {
                         new Claim(ClaimTypes.Name, user.Email),

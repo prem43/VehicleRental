@@ -1,0 +1,63 @@
+@model VehicleRental.Models.UserModels.VehicleSearchModel
+@{
+    ViewData["Title"] = "Vehicles";
+}
+
+<section class="vehicle-page">
+    <div class="container py-5">
+        <div class="vehicle-page-header">
+            <div>
+                <p class="text-uppercase text-info mb-2">Browse rentals</p>
+                <h1>Available Vehicles</h1>
+            </div>
+            <form method="get" class="vehicle-search">
+                <input name="search" value="@Model.Search" class="form-control" placeholder="Search make or model" />
+                <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
+            </form>
+        </div>
+
+        <div class="row g-4 mt-2">
+            @foreach (var vehicle in Model.Vehicles)
+            {
+                <div class="col-md-6 col-lg-4">
+                    <div class="rental-card">
+                        <div class="rental-card-media">
+                            @if (vehicle.ImageUrls.Any())
+                            {
+                                <img src="@vehicle.ImageUrls.First()" alt="@vehicle.Make @vehicle.Model" />
+                            }
+                            else
+                            {
+                                <div class="vehicle-placeholder"><i class="fas fa-car-side"></i></div>
+                            }
+                            <span class="availability-pill @(vehicle.IsAvailable ? "available" : "unavailable")">
+                                @(vehicle.IsAvailable ? "Available" : "Booked")
+                            </span>
+                        </div>
+                        <div class="rental-card-body">
+                            <h2>@vehicle.Make @vehicle.Model</h2>
+                            <p>@vehicle.Year • @vehicle.SellerName</p>
+                            <div class="rental-price">@vehicle.DailyRate.ToString("C") <span>/ day</span></div>
+                            <div class="rental-actions">
+                                <a asp-action="Details" asp-route-id="@vehicle.VehicleId" class="btn btn-outline-light">Details</a>
+                                @if (vehicle.IsAvailable)
+                                {
+                                    <a asp-action="RequestRental" asp-route-id="@vehicle.VehicleId" class="btn btn-primary">Rent Now</a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        @if (!Model.Vehicles.Any())
+        {
+            <div class="empty-state">
+                <i class="fas fa-car"></i>
+                <h2>No approved vehicles found</h2>
+                <p>Try another search or check back after sellers add more vehicles.</p>
+            </div>
+        }
+    </div>
+</section>

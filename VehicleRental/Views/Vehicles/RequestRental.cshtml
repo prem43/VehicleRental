@@ -1,0 +1,66 @@
+@model VehicleRental.Models.UserModels.RentalRequestCreateModel
+@{
+    ViewData["Title"] = "Request Rental";
+}
+
+<section class="vehicle-page">
+    <div class="container py-5">
+        <div class="checkout-panel">
+            <div>
+                <p class="text-uppercase text-info mb-2">Rental request</p>
+                <h1>@Model.Vehicle?.Make @Model.Vehicle?.Model</h1>
+                <p>Submit your dates to the seller. Payment unlocks after approval.</p>
+                <div class="detail-metrics">
+                    <div>
+                        <strong>@Model.Vehicle?.DailyRate.ToString("C")</strong>
+                        <span>Daily rate</span>
+                    </div>
+                    <div>
+                        <strong>@Model.Vehicle?.MinimumRentalDays</strong>
+                        <span>Minimum days</span>
+                    </div>
+                </div>
+            </div>
+
+            <form asp-action="RequestRental" method="post" enctype="multipart/form-data" class="checkout-form">
+                <input asp-for="VehicleId" type="hidden" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label asp-for="StartDate" class="form-label"></label>
+                        <input asp-for="StartDate" class="form-control" />
+                        <span asp-validation-for="StartDate" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="EndDate" class="form-label"></label>
+                        <input asp-for="EndDate" class="form-control" />
+                        <span asp-validation-for="EndDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <label asp-for="Notes" class="form-label mt-3">Message to seller</label>
+                <textarea asp-for="Notes" class="form-control" rows="4" placeholder="Pickup time, location preference, or any concern"></textarea>
+                <label asp-for="IdProofNumber" class="form-label mt-3"></label>
+                <input asp-for="IdProofNumber" class="form-control" placeholder="Driving license, Aadhaar, passport, or other ID number" />
+                <span asp-validation-for="IdProofNumber" class="text-danger"></span>
+
+                <label asp-for="CustomerImage" class="form-label mt-3"></label>
+                <input asp-for="CustomerImage" type="file" class="form-control" accept="image/*" />
+                <span asp-validation-for="CustomerImage" class="text-danger"></span>
+
+                <label asp-for="Documents" class="form-label mt-3">Upload required documents</label>
+                <input asp-for="Documents" type="file" class="form-control" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" />
+                <small class="text-muted d-block mt-1">Upload driving license and ID/address proof. Seller can view and download these before approval.</small>
+                <span asp-validation-for="Documents" class="text-danger"></span>
+                <div class="checkout-total">
+                    <span>Estimated total</span>
+                    <strong>@Model.EstimatedAmount.ToString("C")</strong>
+                </div>
+                <button class="btn btn-primary w-100" type="submit">Submit Request</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

@@ -23,7 +23,16 @@
 
 <!-- Main content -->
 <section class="content">
+    @Html.AntiForgeryToken()
     <div class="container-fluid">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+        }
         <!-- Small boxes (Stat box) -->
         <div class="row">
             <div class="col-lg-3 col-6">
@@ -134,9 +143,14 @@
                                             <td>
                                                 @if (request.Status == "Pending")
                                                 {
-                                                    <button class="btn btn-sm btn-success approve-btn" data-id="@request.RequestId">
-                                                        <i class="fas fa-check"></i>
-                                                    </button>
+                                                    <form asp-action="ProcessRentalRequest" method="post" class="d-inline">
+                                                        <input type="hidden" name="RequestId" value="@request.RequestId" />
+                                                        <input type="hidden" name="Action" value="Approve" />
+                                                        <input type="hidden" name="Reason" value="" />
+                                                        <button class="btn btn-sm btn-success" type="submit">
+                                                            <i class="fas fa-check"></i>
+                                                        </button>
+                                                    </form>
                                                     <button class="btn btn-sm btn-danger reject-btn" data-id="@request.RequestId">
                                                         <i class="fas fa-times"></i>
                                                     </button>
@@ -218,40 +232,21 @@
 
 @section Scripts {
     <script>
-        // Approve/reject buttons
-        $(document).on('click', '.approve-btn', function() {
-            var requestId = $(this).data('id');
-            showApproveModal(requestId);
-        });
-
         $(document).on('click', '.reject-btn', function() {
             var requestId = $(this).data('id');
             showRejectModal(requestId);
         });
 
-        function showApproveModal(requestId) {
-            // You would implement a modal here to confirm approval
-            if (confirm('Are you sure you want to approve this rental request?')) {
-                $.post('/Seller/ProcessRentalRequest', {
-                    RequestId: requestId,
-                    Action: 'Approve',
-                    Reason: ''
-                }, function() {
-                    location.reload();
-                });
-            }
-        }
-
         function showRejectModal(requestId) {
             var reason = prompt('Please enter the reason for rejection:');
             if (reason !== null) {
-                $.post('/Seller/ProcessRentalRequest', {
-                    RequestId: requestId,
-                    Action: 'Reject',
-                    Reason: reason
-                }, function() {
-                    location.reload();
-                });
+                var form = $('<form method="post" action="/Seller/ProcessRentalRequest"></form>');
+                form.append($('input[name="__RequestVerificationToken"]').first().clone());
+                form.append($('<input type="hidden" name="RequestId">').val(requestId));
+                form.append($('<input type="hidden" name="Action">').val('Reject'));
+                form.append($('<input type="hidden" name="Reason">').val(reason));
+                $('body').append(form);
+                form.submit();
             }
         }
     </script>
